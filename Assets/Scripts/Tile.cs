@@ -4,13 +4,9 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public Transform container;
+
+    public void SetHeight(float height) {
+        container.localPosition = new Vector3(0f, height, 0f);
+    }
 }
