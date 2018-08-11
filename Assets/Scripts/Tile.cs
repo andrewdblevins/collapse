@@ -5,17 +5,6 @@ using System;
 
 public enum InfluenceType {stabilization, gold}
 
-//public struct TileWithDistance {
-//    public Tile tile;
-//    public int distance;
-
-//    public TileWithDistance(Tile t, int d)
-//    {
-//        tile = t;
-//        distance = d;
-//    }
-//}
-
 public class Tile : MonoBehaviour {
 
     public Transform container;
@@ -25,12 +14,16 @@ public class Tile : MonoBehaviour {
     private int tileY;
     private int maxDampeningDistance = 3;
     private float baseHpLossRisk = 0.05f;
-    private float stabilizationBaseHpReduction = 0.01f;
+
+    private float stabilizationBaseHpReduction = 1.0f;
 
     private Tile xMinusTile = null;
     private Tile xPlusTile = null;
     private Tile yMinusTile = null;
     private Tile yPlusTile = null;
+
+    //Cache of tiles w/ distance from this tile, w/ an additional filter of maxdistance as first key
+    private Dictionary<int, Dictionary<Tile, int>> tileDistanceCache = new Dictionary<int, Dictionary<Tile, int>> { };
 
     private List<Tile> immediateTiles() {
         List<Tile> tiles = new List<Tile> { xMinusTile, xPlusTile, yMinusTile, yPlusTile };
@@ -38,20 +31,40 @@ public class Tile : MonoBehaviour {
         return tiles;
     }
 
-    //private Dictionary<Tile, int> tilesWithinDistance(int distance, Dictionary<Tile, int> existingTiles = null) {
-    //    if (existingTiles == null) {
-    //        existingTiles = new Dictionary<Tile, int> { };
-    //    }
+    public Dictionary<Tile, int> tilesWithinDistanceCalcImpl(int distance, Dictionary<Tile, int> existingTiles = null) {
+        if (existingTiles == null) {
+            existingTiles = new Dictionary<Tile, int> { };
+        }
+
+        List<Tile> tilesToRecurse = new List<Tile> { };
+        foreach (var tile in immediateTiles()) {
+            if (existingTiles.ContainsKey(tile) && existingTiles[tile] <= distance + 1)
+                continue;
+            
+            existingTiles[tile] = distance + 1;
+            tilesToRecurse.Add(tile);
+        }
 
 
+        if (distance > 1) {
+            foreach (var tile in tilesToRecurse)
+            {
+                existingTiles = tile.tilesWithinDistanceCalcImpl(distance - 1, existingTiles);
+            }
+        }
+        return existingTiles;
+    }
 
+    private Dictionary<Tile, int> tilesWithinDistance(int distance) {
+        if (distance <= 0) return new Dictionary<Tile, int> { };
 
-    //    if (distance > 1) {
-    //        existingTiles = tilesWithinDistance(distance - 1, existingTiles);
-    //    }
-    //}
-
-    //private List<Tile> tilesWithinDistance()
+        if (!tileDistanceCache.ContainsKey(distance)) {
+            //Force creation of all caches with smaller distances first if they don't exist
+            Dictionary<Tile, int> tilesWithinDistanceMinusOne = tilesWithinDistance(distance - 1);
+            tileDistanceCache[distance] = tilesWithinDistanceCalcImpl(distance, tilesWithinDistanceMinusOne);
+        }
+        return tileDistanceCache[distance];
+    }
 
     public void SetHeight(float height) {
         container.localPosition = new Vector3(0f, height, 0f);
@@ -59,6 +72,10 @@ public class Tile : MonoBehaviour {
 
     public int getHp() {
         return hp;
+    }
+
+    public bool tileActive() {
+        return hp > 0;
     }
 
     public void initTile(int x, int y, List<List<Tile>> tileList) {
@@ -89,6 +106,11 @@ public class Tile : MonoBehaviour {
 
     }
 
+    // Should call this in board constructor after all tiles are init-created, so as to speed up first loop later
+    public void initTileDistances() {
+        tilesWithinDistance(maxDampeningDistance);
+    }
+
     // Some prototype function for dampening influence
     private float influenceDampener(float influence, int distance, InfluenceType influenceType) {
         if (distance > maxDampeningDistance) {
@@ -97,9 +119,10 @@ public class Tile : MonoBehaviour {
         return influence / distance;
     }
 
+    //This is a probability, so a 0.20f reduction would reduce some previous risk from 0.05 to 0.04
     public float getInfluence(InfluenceType influenceType) {
         switch (influenceType) {
-            case InfluenceType.stabilization : return 0.5f * stabilizationBaseHpReduction;
+            case InfluenceType.stabilization : return 0.2f * stabilizationBaseHpReduction;
             case InfluenceType.gold : return 0.0f;
         }
         throw new Exception("Bad InfluenceType for getting tile influence");
@@ -108,12 +131,10 @@ public class Tile : MonoBehaviour {
     public float hpLossRisk()
     {
         //Get stabilization influence from neighboring tiles
-        //TODO: Go further than neighboring tiles
-        //TODO: Instead of just subtracting risk, make it more of a compounding percentage reduction effect.
         float risk = baseHpLossRisk;
-        foreach (var tile in immediateTiles())
+        foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(maxDampeningDistance))
         {
-            risk -= influenceDampener(tile.getInfluence(InfluenceType.stabilization), 1, InfluenceType.stabilization);
+            risk *= (1 - influenceDampener(entry.Key.getInfluence(InfluenceType.stabilization), entry.Value, InfluenceType.stabilization));
         }
         return risk;
     }
