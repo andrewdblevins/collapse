@@ -86,17 +86,17 @@ public class Tile : MonoBehaviour {
         }
     }
 
-    public void OnMouseDown() {
+    public void Click() {
         Debug.Log("Clicked " + gameObject.name);
     }
 
-    public void OnMouseEnter() {
+    public void Highlight() {
         foreach (SpriteRenderer s in Images) {
             s.color = Color.yellow;
         }
     }
 
-    public void OnMouseExit() {
+    public void UnHighlight() {
         foreach (SpriteRenderer s in Images) {
             if (hp == 1) {
                 s.color = Color.red;
