@@ -118,6 +118,12 @@ public class Tile : MonoBehaviour {
         return risk;
     }
 
+    public void turnHappens() {
+        if (UnityEngine.Random.value > hpLossRisk()) {
+            hp -= 1;
+        }
+    }
+
 
 
     public override int GetHashCode() {
