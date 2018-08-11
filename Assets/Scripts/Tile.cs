@@ -9,6 +9,9 @@ public class Tile : MonoBehaviour {
 
     public Transform container;
     public List<SpriteRenderer> Images;
+    private Board board;
+
+    private HashSet<Board.Building> buildings = new HashSet<Board.Building>();
 
     private int hp;
     private int tileX;
@@ -93,6 +96,20 @@ public class Tile : MonoBehaviour {
         }
     }
 
+    public void AddBuilding(Board.Building b) {
+        if (!buildings.Contains(b)) {
+            buildings.Add(b);
+            switch (b) {
+                case Board.Building.House: break;
+                case Board.Building.Mine: break;
+                case Board.Building.Stabilizer:
+                    Images[2].gameObject.SetActive(true);
+                    break;
+                default: break;
+            }
+        }
+    }
+
     public void Click() {
         Debug.Log("Clicked " + gameObject.name);
         Images[3].gameObject.SetActive(true);
@@ -122,7 +139,8 @@ public class Tile : MonoBehaviour {
         return hp > 0;
     }
 
-    public void initTile(int x, int y, List<List<Tile>> tileList) {
+    public void initTile(int x, int y, List<List<Tile>> tileList, Board board) {
+        this.board = board;
         tileX = x;
         tileY = y;
 
