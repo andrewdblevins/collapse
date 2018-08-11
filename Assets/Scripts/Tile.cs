@@ -54,12 +54,14 @@ public class Tile : MonoBehaviour {
 
     //private List<Tile> tilesWithinDistance()
 
-    public void SetHeight(float height) {
+    private void SetHeight() {
+        float height = (hp * 0.05f);// - 0.1f;
         container.localPosition = new Vector3(0f, height, 0f);
     }
 
     public void Init() {
-        SetHeight(UnityEngine.Random.Range(-0.1f, 0.1f));
+        // SetHeight(UnityEngine.Random.Range(-0.1f, 0.1f));
+        SetHeight();
 
         bool flip = UnityEngine.Random.Range(0, 3) == 0;
         if (flip) {
@@ -83,7 +85,11 @@ public class Tile : MonoBehaviour {
 
     public void OnMouseExit() {
         foreach (SpriteRenderer s in Images) {
-            s.color = Color.white;
+            if (hp == 1) {
+                s.color = Color.red;
+            } else {
+                s.color = Color.white;
+            }
         }
     }
 
@@ -117,6 +123,7 @@ public class Tile : MonoBehaviour {
             yPlusTile = tileList[y+1][x];
         }
 
+        Init();
     }
 
     // Some prototype function for dampening influence
@@ -149,12 +156,20 @@ public class Tile : MonoBehaviour {
     }
 
     public void turnHappens() {
-        if (UnityEngine.Random.value > hpLossRisk()) {
+        if (UnityEngine.Random.value < hpLossRisk()) {
             hp -= 1;
         }
+
+        if (hp == 0) {
+            container.gameObject.SetActive(false);
+        } else if (hp == 1) {
+            foreach (SpriteRenderer s in Images) {
+                s.color = Color.red;
+            }
+        }
+
+        SetHeight();
     }
-
-
 
     public override int GetHashCode() {
        return tileX * 1000 + tileY;
