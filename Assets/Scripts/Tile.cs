@@ -95,6 +95,7 @@ public class Tile : MonoBehaviour {
 
     public void Click() {
         Debug.Log("Clicked " + gameObject.name);
+        Images[3].gameObject.SetActive(true);
     }
 
     public void Highlight() {
