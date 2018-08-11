@@ -57,9 +57,15 @@ public class Tile : MonoBehaviour {
         container.localPosition = new Vector3(0f, height, 0f);
     }
 
+    public int getHp() {
+        return hp;
+    }
+
     public void initTile(int x, int y, List<List<Tile>> tileList) {
         tileX = x;
         tileY = y;
+
+        hp = 10;
 
         int minTileListX = 0;
         int maxTileListX = tileList[0].Count - 1;
