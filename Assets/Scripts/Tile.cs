@@ -87,9 +87,15 @@ public class Tile : MonoBehaviour {
         }
     }
 
+    public int getHp() {
+        return hp;
+    }
+
     public void initTile(int x, int y, List<List<Tile>> tileList) {
         tileX = x;
         tileY = y;
+
+        hp = 10;
 
         int minTileListX = 0;
         int maxTileListX = tileList[0].Count - 1;
@@ -140,6 +146,12 @@ public class Tile : MonoBehaviour {
             risk -= influenceDampener(tile.getInfluence(InfluenceType.stabilization), 1, InfluenceType.stabilization);
         }
         return risk;
+    }
+
+    public void turnHappens() {
+        if (UnityEngine.Random.value > hpLossRisk()) {
+            hp -= 1;
+        }
     }
 
 
