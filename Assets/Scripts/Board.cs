@@ -31,6 +31,13 @@ public class Board : MonoBehaviour {
                 Tiles[i][j].initTile(i, j, Tiles);
             }
         }
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                Tiles[i][j].initTileDistances();
+            }
+        }
 	}
 
     public void EndTurn() {
