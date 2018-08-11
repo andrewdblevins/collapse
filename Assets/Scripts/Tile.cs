@@ -33,15 +33,21 @@ public class Tile : MonoBehaviour {
     }
 
     public Dictionary<Tile, int> tilesWithinDistanceCalcImpl(int distance, Dictionary<Tile, int> existingTiles = null) {
+        //Debug.Log("Starting distance: " + distance.ToString());
         if (existingTiles == null) {
             existingTiles = new Dictionary<Tile, int> { };
         }
 
         List<Tile> tilesToRecurse = new List<Tile> { };
         foreach (var tile in immediateTiles()) {
+            //Debug.Log("Thinking of adding tile: " + tile.GetHashCode());
+            //Debug.Log("Distance: " + distance.ToString());
+            //Debug.Log("Contains: " + existingTiles.ContainsKey(tile).ToString());
             if (existingTiles.ContainsKey(tile) && existingTiles[tile] <= distance + 1)
                 continue;
-            
+
+            //Debug.Log("Adding tile: " + tile.GetHashCode());
+            //Debug.Log("Distance: " + distance.ToString());
             existingTiles[tile] = distance + 1;
             tilesToRecurse.Add(tile);
         }
@@ -62,7 +68,8 @@ public class Tile : MonoBehaviour {
         if (!tileDistanceCache.ContainsKey(distance)) {
             //Force creation of all caches with smaller distances first if they don't exist
             Dictionary<Tile, int> tilesWithinDistanceMinusOne = tilesWithinDistance(distance - 1);
-            tileDistanceCache[distance] = tilesWithinDistanceCalcImpl(distance, tilesWithinDistanceMinusOne);
+            //tileDistanceCache[distance] = tilesWithinDistanceCalcImpl(distance, tilesWithinDistanceMinusOne);
+            tileDistanceCache[distance] = tilesWithinDistanceCalcImpl(distance);
         }
         return tileDistanceCache[distance];
     }
@@ -86,17 +93,17 @@ public class Tile : MonoBehaviour {
         }
     }
 
-    public void OnMouseDown() {
+    public void Click() {
         Debug.Log("Clicked " + gameObject.name);
     }
 
-    public void OnMouseEnter() {
+    public void Highlight() {
         foreach (SpriteRenderer s in Images) {
             s.color = Color.yellow;
         }
     }
 
-    public void OnMouseExit() {
+    public void UnHighlight() {
         foreach (SpriteRenderer s in Images) {
             if (hp == 1) {
                 s.color = Color.red;
@@ -145,7 +152,13 @@ public class Tile : MonoBehaviour {
 
     // Should call this in board constructor after all tiles are init-created, so as to speed up first loop later
     public void initTileDistances() {
-        tilesWithinDistance(maxDampeningDistance);
+        Dictionary<Tile, int> d = tilesWithinDistance(maxDampeningDistance);
+        //foreach (KeyValuePair<Tile, int> kvp in d)
+        //{
+        //    //textBox3.Text += ("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+        //    Debug.Log(String.Format("Key = {0}, Value = {1}", kvp.Key.GetHashCode(), kvp.Value));
+        //}
+        //Debug.Log("tileDistance " + d);
     }
 
     // Some prototype function for dampening influence
@@ -159,7 +172,7 @@ public class Tile : MonoBehaviour {
     //This is a probability, so a 0.20f reduction would reduce some previous risk from 0.05 to 0.04
     public float getInfluence(InfluenceType influenceType) {
         switch (influenceType) {
-            case InfluenceType.stabilization : return 0.2f * stabilizationBaseHpReduction;
+            case InfluenceType.stabilization : return 0.35f * stabilizationBaseHpReduction;
             case InfluenceType.gold : return 0.0f;
         }
         throw new Exception("Bad InfluenceType for getting tile influence");
@@ -171,7 +184,7 @@ public class Tile : MonoBehaviour {
         float risk = baseHpLossRisk;
         foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(maxDampeningDistance))
         {
-            risk *= (1 - influenceDampener(entry.Key.getInfluence(InfluenceType.stabilization), entry.Value, InfluenceType.stabilization));
+            risk *= (1.0f - influenceDampener(entry.Key.getInfluence(InfluenceType.stabilization), entry.Value, InfluenceType.stabilization));
         }
         return risk;
     }
