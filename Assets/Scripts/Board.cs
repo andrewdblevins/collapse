@@ -19,7 +19,7 @@ public class Board : MonoBehaviour {
                 //GameObject tileObj = GameObject.Instantiate(TilePrefab, new Vector3((j - i)*0.42f, (i + j) * 0.21f, (i + j) * 0.21f), Quaternion.identity, TileContainer);
                 tileObj.name = "Tile( " + i + ", " + j + ")";
                 Tile tile = tileObj.GetComponent<Tile>() as Tile;
-                tile.SetHeight(Random.Range(-0.1f, 0.1f));
+                tile.Init();
                 Tiles[i].Add(tile);
             }
         }
