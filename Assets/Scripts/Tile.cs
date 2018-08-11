@@ -8,6 +8,7 @@ public enum InfluenceType {stabilization, gold}
 public class Tile : MonoBehaviour {
 
     public Transform container;
+    public List<SpriteRenderer> Images;
 
     private int hp;
     private int tileX;
@@ -66,8 +67,43 @@ public class Tile : MonoBehaviour {
         return tileDistanceCache[distance];
     }
 
-    public void SetHeight(float height) {
+    private void SetHeight() {
+        float height = (hp * 0.05f);// - 0.1f;
         container.localPosition = new Vector3(0f, height, 0f);
+    }
+
+    public void Init() {
+        // SetHeight(UnityEngine.Random.Range(-0.1f, 0.1f));
+        SetHeight();
+
+        bool flip = UnityEngine.Random.Range(0, 3) == 0;
+        if (flip) {
+            Images[1].gameObject.SetActive(true);
+            flip = UnityEngine.Random.Range(0, 3) == 0;
+            if (flip) {
+                Images[2].gameObject.SetActive(true);
+            }
+        }
+    }
+
+    public void OnMouseDown() {
+        Debug.Log("Clicked " + gameObject.name);
+    }
+
+    public void OnMouseEnter() {
+        foreach (SpriteRenderer s in Images) {
+            s.color = Color.yellow;
+        }
+    }
+
+    public void OnMouseExit() {
+        foreach (SpriteRenderer s in Images) {
+            if (hp == 1) {
+                s.color = Color.red;
+            } else {
+                s.color = Color.white;
+            }
+        }
     }
 
     public int getHp() {
@@ -104,6 +140,7 @@ public class Tile : MonoBehaviour {
             yPlusTile = tileList[y+1][x];
         }
 
+        Init();
     }
 
     // Should call this in board constructor after all tiles are init-created, so as to speed up first loop later
@@ -140,12 +177,20 @@ public class Tile : MonoBehaviour {
     }
 
     public void turnHappens() {
-        if (UnityEngine.Random.value > hpLossRisk()) {
+        if (UnityEngine.Random.value < hpLossRisk()) {
             hp -= 1;
         }
+
+        if (hp == 0) {
+            container.gameObject.SetActive(false);
+        } else if (hp == 1) {
+            foreach (SpriteRenderer s in Images) {
+                s.color = Color.red;
+            }
+        }
+
+        SetHeight();
     }
-
-
 
     public override int GetHashCode() {
        return tileX * 1000 + tileY;
