@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Board : MonoBehaviour {
 
-    public enum Building { None, Mine, House, Stabilizer, Gold, Void};
+    public enum Building { None, Mine, House, Stabilizer, Farm, Gold, Void};
     public Building selectedType = Building.None;
 
     public GameObject TilePrefab;
@@ -13,7 +13,7 @@ public class Board : MonoBehaviour {
     public Transform TileContainer;
     public Text hintText;
 
-    float tick = 10f;
+    float tick = 3f;
     float tickTimer = 10f;
 
     List<List<Tile>> Tiles = new List<List<Tile>>();
@@ -116,15 +116,19 @@ public class Board : MonoBehaviour {
 
     public void EndTurn() {
         tickTimer = tick;
-        float totalHarvest = 0f;
+        float totalGoldHarvest = 0f;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < width; j++) {
                 Tiles[i][j].turnHappens();
-                totalHarvest += Tiles[i][j].goldHarvest();
+                totalGoldHarvest += Tiles[i][j].goldHarvest();
+
                 ResourcesPanel.Instance.UpdateGold(Tiles[i][j].goldHarvest());
+                ResourcesPanel.Instance.UpdateFood(Tiles[i][j].foodHarvest());
+                ResourcesPanel.Instance.UpdateIron(Tiles[i][j].ironHarvest());
+                ResourcesPanel.Instance.UpdateCoal(Tiles[i][j].coalHarvest());
             }
         }
-        Debug.Log("totalHarvest: " + totalHarvest);
+        Debug.Log("totalGoldHarvest: " + totalGoldHarvest);
     }
 
     public void SetSelectedType(string type) {
@@ -148,6 +152,9 @@ public class Board : MonoBehaviour {
                 case Board.Building.Stabilizer:
                     hintText.text = "Cost " + Globals.Instance.StabilizerCost + ":   Build a Stabilizer to prevent tiles from falling";
                     break;
+                case Board.Building.Farm:
+                    hintText.text = "Cost " + Globals.Instance.StabilizerCost + ":   Build a Farm to produce food";
+                    break;
                 default: break;
             }
         } else {
@@ -169,6 +176,7 @@ public class Board : MonoBehaviour {
             case Building.Mine: return Globals.Instance.MineCost;
             case Building.House: return Globals.Instance.HouseCost;
             case Building.Stabilizer: return Globals.Instance.StabilizerCost;
+            case Building.Farm: return Globals.Instance.FarmCost;
             case Building.Gold: return 0f;
         }
 

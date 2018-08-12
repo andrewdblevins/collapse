@@ -20,5 +20,6 @@ public class Globals : MonoBehaviour {
     public float MineCost = 50f;
     public float HouseCost = 25f;
     public float StabilizerCost = 100f;
+    public float FarmCost = 10f;
     public float DecayRate = 100f;
 }

@@ -37,8 +37,8 @@ public class ResourcesPanel : MonoBehaviour
     {
         UpdateIron(100f);
         UpdateCoal(40f);
-        UpdateGold(100f);
-        UpdateFood(100f);
+        UpdateGold(1000f);
+        UpdateFood(10f);
 
     }
 
@@ -59,6 +59,11 @@ public class ResourcesPanel : MonoBehaviour
 
     public float GetCoal() {
         return coal;
+    }
+
+    public float GetFood()
+    {
+        return food;
     }
 
     //Resources
@@ -85,7 +90,7 @@ public class ResourcesPanel : MonoBehaviour
     public void UpdateFood(float amount)
     {
         food += amount;
-        UpdateFoodText(coal);
+        UpdateFoodText(food);
 
     }
     private void UpdateIronText(float t)

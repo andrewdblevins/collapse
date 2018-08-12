@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum InfluenceType {stabilization, gold, mine}
+public enum InfluenceType {stabilization, gold, mine, farm}
 
 public class Tile : MonoBehaviour {
 
@@ -68,6 +68,9 @@ public class Tile : MonoBehaviour {
                 break;
             case Board.Building.Stabilizer:
                 BuildingImages[3].gameObject.SetActive(true);
+                break;
+            case Board.Building.Farm:
+                BuildingImages[4].gameObject.SetActive(true);
                 break;
             default:
                 Debug.Log("Not adding Building: " + b);
@@ -241,6 +244,14 @@ public class Tile : MonoBehaviour {
                     }
                     return 0.0f;
                 }
+            case InfluenceType.farm:
+                {
+                    if (building == Board.Building.House)
+                    {
+                        return 0.5f;
+                    }
+                    return 0.0f;
+                }
         }
         throw new Exception("Bad InfluenceType for getting tile influence");
     }
@@ -253,6 +264,30 @@ public class Tile : MonoBehaviour {
             }
             return gold * Globals.Instance.GoldMultiplier;
         }
+        return 0.0f;
+    }
+
+    public float foodHarvest()
+    {
+        if (building == Board.Building.Farm)
+        {
+            float food = 1.0f;
+            foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1))
+            {
+                food += entry.Key.getInfluence(InfluenceType.farm);
+            }
+            return food;
+        }
+        return 0.0f;
+    }
+
+    public float ironHarvest()
+    {
+        return 0.0f;
+    }
+
+    public float coalHarvest()
+    {
         return 0.0f;
     }
 
