@@ -13,6 +13,9 @@ public class Board : MonoBehaviour {
     public Transform TileContainer;
     public Text hintText;
 
+    float tick = 10f;
+    float tickTimer = 10f;
+
     List<List<Tile>> Tiles = new List<List<Tile>>();
 
     private const int width = 15;
@@ -102,10 +105,17 @@ public class Board : MonoBehaviour {
 
     void Update()
     {
+        tickTimer -= Time.deltaTime;
+        if (tickTimer <= 0)
+        {
+            EndTurn();
+        }
+
 
     }
 
     public void EndTurn() {
+        tickTimer = tick;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < width; j++) {
                 Tiles[i][j].turnHappens();
