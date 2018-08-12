@@ -22,9 +22,7 @@ public class Tile : MonoBehaviour {
     private int tileX;
     private int tileY;
     private const int maxDampeningDistance = 3;
-    private const float baseHpLossRisk = 0.05f;
-
-    private const float stabilizationBaseHpReduction = 1.0f;
+    private const float baseHpLossRisk = 0.03f;
 
     private Tile xMinusTile = null;
     private Tile xPlusTile = null;
@@ -210,13 +208,18 @@ public class Tile : MonoBehaviour {
         if (distance > maxDampeningDistance) {
             return 0.0f;
         }
-        return (1.0f + (float)hpDifference / 5.0f) * influence / distance;
+        return (1.0f + (float)hpDifference / 6.0f) * influence / distance;
     }
 
     //This is a probability, so a 0.20f reduction would reduce some previous risk from 0.05 to 0.04
     public float getInfluence(InfluenceType influenceType) {
         switch (influenceType) {
-            case InfluenceType.stabilization : return 0.35f * stabilizationBaseHpReduction;
+            case InfluenceType.stabilization :
+                {
+                    float reduction = 0.25f;
+                    if (building == Board.Building.Stabilizer) reduction += 0.9f;
+                    return reduction;
+                }
             case InfluenceType.gold : return 0.0f;
         }
         throw new Exception("Bad InfluenceType for getting tile influence");
