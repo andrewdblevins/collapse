@@ -19,6 +19,7 @@ public class Tile : MonoBehaviour
 
     private Board.Building building = Board.Building.None;
     private float total_rotation = 0f;
+    private float starting_max_rotation = 5f;
     private float max_rotation = 5f;
     private float last_rotation = 1f;
     private float rotation_rate = 5f;
@@ -74,7 +75,12 @@ public class Tile : MonoBehaviour
 
 
 
-
+    void Start(){
+        max_rotation = starting_max_rotation;
+        //if(hp > 0){
+        //    hp += 5;
+        //}
+    }
 
     void Update()
     {
@@ -87,7 +93,12 @@ public class Tile : MonoBehaviour
 
     public void UpdateSway(){
         
-        rotation_rate = 5 + Mathf.Max(1, (10 - hp));
+        rotation_rate = 20 * modifiedHpLossRisk + Mathf.Max(1, (8 - hp));
+        max_rotation = starting_max_rotation - 3 * modifiedHpLossRisk;
+        if(building == Board.Building.Stabilizer){
+            rotation_rate /= 10;
+            max_rotation = Mathf.Min(max_rotation, starting_max_rotation / 5);
+        }
         //max_rotation = rotation_rate * 3;
     }
 
