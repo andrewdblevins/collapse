@@ -45,6 +45,19 @@ public class ResourcesPanel : MonoBehaviour
     }
 
     //Resources
+    public float GetGold() {
+        return gold;
+    }
+
+    public float GetIron() {
+        return iron;
+    }
+
+    public float GetCoal() {
+        return coal;
+    }
+
+    //Resources
     public void UpdateGold(float amount)
     {
         gold += amount;

@@ -49,6 +49,7 @@ public class Tile : MonoBehaviour {
 
         if (UnityEngine.Random.value < 0.1f) {
             foreach (SpriteRenderer s in OreImages) {
+                building = Board.Building.Gold;
                 s.gameObject.SetActive(true);
             }
         }
@@ -67,7 +68,9 @@ public class Tile : MonoBehaviour {
             case Board.Building.Stabilizer:
                 BuildingImages[3].gameObject.SetActive(true);
                 break;
-            default: break;
+            default:
+                Debug.Log("Not adding Building: " + b);
+                break;
         }
     }
 
