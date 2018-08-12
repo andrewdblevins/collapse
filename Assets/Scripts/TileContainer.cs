@@ -12,9 +12,11 @@ public class TileContainer : MonoBehaviour {
 
     public void OnMouseEnter() {
         tile.Highlight();
+        tile.displayInfluenceIcon();
     }
 
     public void OnMouseExit() {
         tile.UnHighlight();
+        tile.stopDisplayingInfluenceIcon();
     }
 }
