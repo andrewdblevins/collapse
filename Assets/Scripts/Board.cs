@@ -140,13 +140,13 @@ public class Board : MonoBehaviour {
                     hintText.text = "";
                     break;
                 case Board.Building.House:
-                    hintText.text = "Cost 25:   Build a House next to Mines to make them mine more";
+                    hintText.text = "Cost " + Globals.Instance.HouseCost + ":   Build a House next to Mines to make them mine more";
                     break;
                 case Board.Building.Mine:
-                    hintText.text = "Cost 50:   Build a Mine next to ore";
+                    hintText.text = "Cost " + Globals.Instance.MineCost + ":   Build a Mine next to ore";
                     break;
                 case Board.Building.Stabilizer:
-                    hintText.text = "Cost 100:   Build a Stabilizer to prevent tiles from falling";
+                    hintText.text = "Cost " + Globals.Instance.StabilizerCost + ":   Build a Stabilizer to prevent tiles from falling";
                     break;
                 default: break;
             }
@@ -166,9 +166,9 @@ public class Board : MonoBehaviour {
     private float GetCost(Building b) {
         switch (b) {
             case Building.None: return 0f;
-            case Building.Mine: return 50f;
-            case Building.House: return 25f;
-            case Building.Stabilizer: return 100f;
+            case Building.Mine: return Globals.Instance.MineCost;
+            case Building.House: return Globals.Instance.HouseCost;
+            case Building.Stabilizer: return Globals.Instance.StabilizerCost;
             case Building.Gold: return 0f;
         }
 
