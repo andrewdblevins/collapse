@@ -142,10 +142,23 @@ public class Board : MonoBehaviour {
     }
 
     public void TileClicked(Tile tile) {
-        if (selectedType != Building.None && tile.IsEmpty()) {
+        if (selectedType != Building.None && tile.IsEmpty() && ResourcesPanel.Instance.GetGold() >= GetCost(selectedType)) {
+            ResourcesPanel.Instance.UpdateGold(-GetCost(selectedType));
             tile.SetBuilding(selectedType);
             SetSelectedType(Building.None);
         }
+    }
+
+    private float GetCost(Building b) {
+        switch (b) {
+            case Building.None: return 0f;
+            case Building.Mine: return 100f;
+            case Building.House: return 150f;
+            case Building.Stabilizer: return 200f;
+            case Building.Gold: return 0f;
+        }
+
+        return 0f;
     }
 
 }
