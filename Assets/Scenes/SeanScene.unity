@@ -247,7 +247,7 @@ GameObject:
   - component: {fileID: 57777525}
   - component: {fileID: 57777524}
   m_Layer: 5
-  m_Name: Resource4
+  m_Name: WoodResource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -266,11 +266,11 @@ RectTransform:
   - {fileID: 1257554007}
   - {fileID: 542894186}
   m_Father: {fileID: 469976161}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 351.875, y: -39.19997}
+  m_AnchoredPosition: {x: 48.125, y: -39.19997}
   m_SizeDelta: {x: 96.25, y: 78.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &57777524
@@ -374,7 +374,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Farm
+  m_Text: Sawmill
 --- !u!222 &248773292
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -474,10 +474,14 @@ MonoBehaviour:
   GoldMultiplier: 3
   IronMultiplier: 3
   CoalMultiplier: 3
-  MineCost: 50
-  HouseCost: 25
-  StabilizerCost: 100
-  FarmCost: 10
+  SawCost: {x: 25, y: 0, z: 0, w: 0}
+  MineCost: {x: 50, y: 0, z: 0, w: 0}
+  HouseCost: {x: 25, y: 0, z: 0, w: 0}
+  StabilizerCost: {x: 50, y: 50, z: 0, w: 0}
+  Saw2Cost: {x: 0, y: 25, z: 0, w: 0}
+  Mine2Cost: {x: 0, y: 25, z: 25, w: 0}
+  House2Cost: {x: 10, y: 10, z: 10, w: 0}
+  Stabilizer2Cost: {x: 0, y: 0, z: 25, w: 25}
   DecayRate: 100
 --- !u!1001 &345508695
 Prefab:
@@ -691,10 +695,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 799947053}
+  - {fileID: 57777523}
   - {fileID: 1135916925}
   - {fileID: 1020463152}
-  - {fileID: 57777523}
+  - {fileID: 799947053}
   m_Father: {fileID: 1303781158}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -833,7 +837,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 9b96304b5f7c0408ab80fd1cc21b9a48, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3f8bf80dae5fea347a478b00f624d4cb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -943,14 +947,14 @@ RectTransform:
   m_GameObject: {fileID: 728945408}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 1866421131}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 5}
+  m_AnchoredPosition: {x: 0, y: -5}
   m_SizeDelta: {x: 90, y: 180}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &728945410
@@ -972,7 +976,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 3b4c43b5cfc434ca58cc0dfff5a4f146, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ecb6f76125504154aa30d8adbd24852c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1163,10 +1167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31fbeb7e09b9d4ed3aa2e376ad6dc08f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  woodText: {fileID: 1257554008}
   ironText: {fileID: 1838202288}
   coalText: {fileID: 361360272}
   goldText: {fileID: 1189346220}
-  foodText: {fileID: 1257554008}
 --- !u!114 &797883686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1248,18 +1252,18 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 799947052}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1189346219}
   - {fileID: 1519585786}
   m_Father: {fileID: 469976161}
-  m_RootOrder: 0
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 48.125, y: -39.2}
+  m_AnchoredPosition: {x: 351.875, y: -39.200012}
   m_SizeDelta: {x: 96.25, y: 78.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &799947054
@@ -1396,11 +1400,11 @@ RectTransform:
   - {fileID: 1732837281}
   - {fileID: 649144797}
   m_Father: {fileID: 1348616042}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 81.25, y: -30}
+  m_AnchoredPosition: {x: 81.25, y: -60}
   m_SizeDelta: {x: 150, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &850764174
@@ -1591,11 +1595,11 @@ RectTransform:
   - {fileID: 435220907}
   - {fileID: 819648082}
   m_Father: {fileID: 1348616042}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 81.25, y: -90}
+  m_AnchoredPosition: {x: 81.25, y: -120}
   m_SizeDelta: {x: 150, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1035801265
@@ -1919,7 +1923,7 @@ GameObject:
   - component: {fileID: 1257554009}
   - component: {fileID: 1257554008}
   m_Layer: 5
-  m_Name: Food
+  m_Name: Wood
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1977,7 +1981,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Food
+  m_Text: Wood
 --- !u!222 &1257554009
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2111,10 +2115,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1866421131}
   - {fileID: 850764173}
   - {fileID: 2041261215}
   - {fileID: 1035801264}
-  - {fileID: 1866421131}
   m_Father: {fileID: 1303781158}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2556,7 +2560,7 @@ GameObject:
   - component: {fileID: 1866421133}
   - component: {fileID: 1866421132}
   m_Layer: 5
-  m_Name: Farm
+  m_Name: Sawmill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2575,11 +2579,11 @@ RectTransform:
   - {fileID: 248773290}
   - {fileID: 728945409}
   m_Father: {fileID: 1348616042}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 81.25, y: -120}
+  m_AnchoredPosition: {x: 81.25, y: -30}
   m_SizeDelta: {x: 150, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1866421132
@@ -2629,7 +2633,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Farm
+          m_StringArgument: Saw
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -2711,6 +2715,18 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1091139303339974, guid: 2dad3b2b3463ae840a40720ef146a432, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1772330626190494, guid: 2dad3b2b3463ae840a40720ef146a432, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884640687471968, guid: 2dad3b2b3463ae840a40720ef146a432, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2dad3b2b3463ae840a40720ef146a432, type: 2}
   m_IsPrefabAsset: 0
@@ -2751,11 +2767,11 @@ RectTransform:
   - {fileID: 744086943}
   - {fileID: 729846092}
   m_Father: {fileID: 1348616042}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 81.25, y: -60}
+  m_AnchoredPosition: {x: 81.25, y: -90}
   m_SizeDelta: {x: 150, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2041261216
