@@ -109,6 +109,7 @@ public class Board : MonoBehaviour {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < width; j++) {
                 Tiles[i][j].turnHappens();
+                ResourcesPanel.Instance.UpdateGold(Tiles[i][j].goldHarvest());
             }
         }
     }
