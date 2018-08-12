@@ -86,7 +86,7 @@ public class Board : MonoBehaviour {
         //Apply tile height smoothing
         int iCnt = 0;
         while (iCnt < 400) {
-            bool ifSmoothed = Tiles[UnityEngine.Random.Range(0, width-1)][UnityEngine.Random.Range(0, width-1)].smoothHp();
+            bool ifSmoothed = Tiles[UnityEngine.Random.Range(1, width-2)][UnityEngine.Random.Range(1, width-2)].smoothHp();
             iCnt += 1;
         }
         iCnt = 0;
