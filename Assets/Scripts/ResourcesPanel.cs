@@ -41,14 +41,14 @@ public class ResourcesPanel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        UpdateGold(1);
     }
 
     //Resources
     public void UpdateGold(float amount)
     {
         gold += amount;
-        UpdateIronText(gold);
+        UpdateGoldText(gold);
     }
 
     public void UpdateIron(float amount)
