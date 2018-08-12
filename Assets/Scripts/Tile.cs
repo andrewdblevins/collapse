@@ -5,7 +5,8 @@ using System;
 
 public enum InfluenceType {stabilization, gold, mine, farm}
 
-public class Tile : MonoBehaviour {
+public class Tile : MonoBehaviour
+{
 
     public Transform container;
     public List<SpriteRenderer> Images;
@@ -17,7 +18,9 @@ public class Tile : MonoBehaviour {
     private Board board;
 
     private Board.Building building = Board.Building.None;
-
+    private float total_rotation = 0f;
+    private float max_rotation = 5f;
+    private float last_rotation = 0f;
     private int hp = -1;
     private int tileX;
     private int tileY;
@@ -30,6 +33,7 @@ public class Tile : MonoBehaviour {
     private Tile yMinusTile = null;
     private Tile yPlusTile = null;
 
+
     private int minTileListX;
     private int maxTileListX;
     private int minTileListY;
@@ -38,23 +42,70 @@ public class Tile : MonoBehaviour {
     //Cache of tiles w/ distance from this tile, w/ an additional filter of maxdistance as first key
     private Dictionary<int, Dictionary<Tile, int>> tileDistanceCache = new Dictionary<int, Dictionary<Tile, int>> { };
 
-    public void Init() {
+    public void Init()
+    {
         SetHeight();
 
-        if (UnityEngine.Random.value < 0.33f) {
+        if (UnityEngine.Random.value < 0.33f)
+        {
             Dodads[0].gameObject.SetActive(true);
-            if (UnityEngine.Random.value < 0.33f) {
+            if (UnityEngine.Random.value < 0.33f)
+            {
                 Dodads[1].gameObject.SetActive(true);
             }
         }
 
-        if (UnityEngine.Random.value < 0.1f) {
-            foreach (SpriteRenderer s in OreImages) {
+        if (UnityEngine.Random.value < 0.1f)
+        {
+            foreach (SpriteRenderer s in OreImages)
+            {
                 building = Board.Building.Gold;
                 s.gameObject.SetActive(true);
             }
         }
     }
+
+
+    void Update()
+    {
+        Tremor();
+
+
+
+    }
+
+    public void Tremor()
+    {
+        if (last_rotation >= 0)
+        {
+            last_rotation = 5 * Time.deltaTime;
+            total_rotation += last_rotation;
+
+        }
+        else
+        {
+            last_rotation = -5 * Time.deltaTime;
+            total_rotation += last_rotation;
+        }
+
+        transform.Rotate(new Vector3(0f, 0f, last_rotation));
+
+        if (Mathf.Abs(total_rotation) > max_rotation)
+        {
+            if (total_rotation > 0)
+            {
+                last_rotation = -1;
+
+            }
+            else
+            {
+                last_rotation = 1;
+            }
+        }
+    }
+
+
+
 
     public void SetBuilding(Board.Building b) {
         building = b;
@@ -395,4 +446,6 @@ public class Tile : MonoBehaviour {
     public override int GetHashCode() {
        return tileX * 1000 + tileY;
     }
+
+
 }
