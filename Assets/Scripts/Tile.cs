@@ -148,13 +148,28 @@ public class Tile : MonoBehaviour
                 break;
             case Board.Building.Mine:
                 BuildingImages[2].gameObject.SetActive(true);
-                BuildingImages[3].gameObject.SetActive(true);
                 break;
             case Board.Building.Stabilizer:
                 BuildingImages[5].gameObject.SetActive(true);
                 break;
             case Board.Building.Saw:
                 BuildingImages[6].gameObject.SetActive(true);
+                break;
+            case Board.Building.House2:
+                BuildingImages[0].gameObject.SetActive(true);
+                BuildingImages[1].gameObject.SetActive(false);
+                BuildingImages[2].gameObject.SetActive(true);
+                break;
+            case Board.Building.Mine2:
+                BuildingImages[2].gameObject.SetActive(true);
+                BuildingImages[3].gameObject.SetActive(true);
+                break;
+            case Board.Building.Stabilizer2:
+                BuildingImages[5].gameObject.SetActive(true);
+                BuildingImages[9].gameObject.SetActive(true);
+                break;
+            case Board.Building.Saw2:
+                BuildingImages[7].gameObject.SetActive(true);
                 break;
             default:
                 Debug.Log("Not adding Building: " + b);
