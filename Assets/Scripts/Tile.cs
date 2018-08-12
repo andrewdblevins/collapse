@@ -223,7 +223,7 @@ public class Tile : MonoBehaviour
                 BuildingImages[3].gameObject.SetActive(true);
                 break;
             case Board.Building.Stabilizer2:
-                BuildingImages[5].gameObject.SetActive(true);
+                BuildingImages[5].gameObject.SetActive(false);
                 BuildingImages[9].gameObject.SetActive(true);
                 break;
             case Board.Building.Saw2:
