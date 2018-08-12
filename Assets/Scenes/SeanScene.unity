@@ -472,6 +472,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GoldMultiplier: 3
+  IronMultiplier: 3
+  CoalMultiplier: 3
   MineCost: 50
   HouseCost: 25
   StabilizerCost: 100

@@ -58,11 +58,11 @@ public class Tile : MonoBehaviour
 
         if (UnityEngine.Random.value < 0.1f)
         {
-            foreach (SpriteRenderer s in OreImages)
-            {
-                building = Board.Building.Gold;
-                s.gameObject.SetActive(true);
-            }
+            building = Board.Building.Iron;
+            OreImages[0].gameObject.SetActive(true);
+        } else if (UnityEngine.Random.value < 0.05f) {
+            building = Board.Building.Coal;
+            OreImages[1].gameObject.SetActive(true);
         }
 
 
@@ -132,9 +132,10 @@ public class Tile : MonoBehaviour
                 break;
             case Board.Building.Mine:
                 BuildingImages[2].gameObject.SetActive(true);
+                BuildingImages[3].gameObject.SetActive(true);
                 break;
             case Board.Building.Stabilizer:
-                BuildingImages[3].gameObject.SetActive(true);
+                BuildingImages[5].gameObject.SetActive(true);
                 break;
             case Board.Building.Farm:
                 BuildingImages[4].gameObject.SetActive(true);
