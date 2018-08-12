@@ -195,10 +195,9 @@ public class Board : MonoBehaviour {
             buildType = GetUpgradeType(tile.GetBuildingType());
         }
 
-        if (selectedType != Building.None && ResourcesPanel.Instance.CanAfford( GetCost(selectedType))) {
-            ResourcesPanel.Instance.UpdateAll(-GetCost(selectedType));
-            tile.SetBuilding(selectedType);
-            //SetSelectedType(Building.None);
+        if (buildType != Building.None && ResourcesPanel.Instance.CanAfford( GetCost(buildType))) {
+            ResourcesPanel.Instance.UpdateAll(-GetCost(buildType));
+            tile.SetBuilding(buildType);
         }
     }
 

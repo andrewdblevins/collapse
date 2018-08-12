@@ -185,7 +185,7 @@ public class Tile : MonoBehaviour
         switch (b) {
             case Board.Building.House:
                 BuildingImages[0].gameObject.SetActive(true);
-                BuildingImages[1].gameObject.SetActive(true);
+                //BuildingImages[1].gameObject.SetActive(true);
                 break;
             case Board.Building.Mine:
                 BuildingImages[2].gameObject.SetActive(true);
@@ -199,7 +199,7 @@ public class Tile : MonoBehaviour
             case Board.Building.House2:
                 BuildingImages[0].gameObject.SetActive(true);
                 BuildingImages[1].gameObject.SetActive(false);
-                BuildingImages[2].gameObject.SetActive(true);
+                BuildingImages[8].gameObject.SetActive(true);
                 break;
             case Board.Building.Mine2:
                 BuildingImages[2].gameObject.SetActive(true);
