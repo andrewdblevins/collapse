@@ -718,6 +718,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31fbeb7e09b9d4ed3aa2e376ad6dc08f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gold: 10
+  iron: 50
+  coal: 100
   ironText: {fileID: 1838202288}
   coalText: {fileID: 361360272}
   goldText: {fileID: 1189346220}

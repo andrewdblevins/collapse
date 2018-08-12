@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Board : MonoBehaviour {
 
-    public enum Building { None, Mine, House, Stabilizer};
+    public enum Building { None, Mine, House, Stabilizer, Gold};
     public Building selectedType = Building.None;
 
     public GameObject TilePrefab;
@@ -119,6 +119,7 @@ public class Board : MonoBehaviour {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < width; j++) {
                 Tiles[i][j].turnHappens();
+                ResourcesPanel.Instance.UpdateGold(Tiles[i][j].goldHarvest());
             }
         }
     }
@@ -152,10 +153,23 @@ public class Board : MonoBehaviour {
     }
 
     public void TileClicked(Tile tile) {
-        if (selectedType != Building.None && tile.IsEmpty()) {
+        if (selectedType != Building.None && tile.IsEmpty() && ResourcesPanel.Instance.GetGold() >= GetCost(selectedType)) {
+            ResourcesPanel.Instance.UpdateGold(-GetCost(selectedType));
             tile.SetBuilding(selectedType);
             SetSelectedType(Building.None);
         }
+    }
+
+    private float GetCost(Building b) {
+        switch (b) {
+            case Building.None: return 0f;
+            case Building.Mine: return 100f;
+            case Building.House: return 150f;
+            case Building.Stabilizer: return 200f;
+            case Building.Gold: return 0f;
+        }
+
+        return 0f;
     }
 
 }

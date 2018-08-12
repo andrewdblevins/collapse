@@ -49,6 +49,7 @@ public class Tile : MonoBehaviour {
 
         if (UnityEngine.Random.value < 0.1f) {
             foreach (SpriteRenderer s in OreImages) {
+                building = Board.Building.Gold;
                 s.gameObject.SetActive(true);
             }
         }
@@ -67,7 +68,9 @@ public class Tile : MonoBehaviour {
             case Board.Building.Stabilizer:
                 BuildingImages[3].gameObject.SetActive(true);
                 break;
-            default: break;
+            default:
+                Debug.Log("Not adding Building: " + b);
+                break;
         }
     }
 
@@ -220,9 +223,26 @@ public class Tile : MonoBehaviour {
                     if (building == Board.Building.Stabilizer) reduction += 0.9f;
                     return reduction;
                 }
-            case InfluenceType.gold : return 0.0f;
+            case InfluenceType.gold : {
+                    if (building == Board.Building.Mine) {
+                        // Gather tilesWithinDistance(1) for houses and gather house influence
+                        return 1.0f;
+                    }
+                    return 0.0f;
+                }
         }
         throw new Exception("Bad InfluenceType for getting tile influence");
+    }
+
+    public float goldHarvest() {
+        if (building == Board.Building.Gold) {
+            float gold = 1.0f;
+            foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1)) {
+                gold += entry.Key.getInfluence(InfluenceType.gold);
+            }
+            return gold;
+        }
+        return 0.0f;
     }
 
     public float hpLossRisk()
