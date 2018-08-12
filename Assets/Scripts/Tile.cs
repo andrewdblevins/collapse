@@ -204,11 +204,11 @@ public class Tile : MonoBehaviour {
     }
 
     // Some prototype function for dampening influence
-    private float influenceDampener(float influence, int distance, InfluenceType influenceType) {
+    private float influenceDampener(float influence, int hpDifference, int distance, InfluenceType influenceType) {
         if (distance > maxDampeningDistance) {
             return 0.0f;
         }
-        return influence / distance;
+        return (1.0f + (float)hpDifference / 5.0f) * influence / distance;
     }
 
     //This is a probability, so a 0.20f reduction would reduce some previous risk from 0.05 to 0.04
@@ -226,7 +226,10 @@ public class Tile : MonoBehaviour {
         float risk = baseHpLossRisk;
         foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(maxDampeningDistance))
         {
-            risk *= (1.0f - influenceDampener(entry.Key.getInfluence(InfluenceType.stabilization), entry.Value, InfluenceType.stabilization));
+            risk *= (1.0f - influenceDampener(entry.Key.getInfluence(InfluenceType.stabilization), 
+                                              entry.Key.getHp() - getHp(), 
+                                              entry.Value, 
+                                              InfluenceType.stabilization));
         }
 
         risk = risk * 100;
