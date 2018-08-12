@@ -170,7 +170,7 @@ public class Board : MonoBehaviour {
         }
     }
 
-    private float GetCost(Building b) {
+    private Vector4 GetCost(Building b) {
         switch (b) {
             case Building.None: return 0f;
             case Building.Mine: return Globals.Instance.MineCost;

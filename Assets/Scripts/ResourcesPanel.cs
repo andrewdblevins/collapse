@@ -6,15 +6,16 @@ using UnityEngine.UI;
 public class ResourcesPanel : MonoBehaviour
 {
     //Resouces
-    private float gold = 10f;
-    private float iron = 50f;
-    private float coal = 100f;
-    private float food = 100f;
 
+    private float wood = 150f;
+    private float iron = 0f;
+    private float coal = 0f;
+    private float gold = 0f;
+
+    public Text woodText;
     public Text ironText;
     public Text coalText;
     public Text goldText;
-    public Text foodText;
 
     public static ResourcesPanel Instance { get; private set; }
 
@@ -35,10 +36,10 @@ public class ResourcesPanel : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        UpdateIron(100f);
-        UpdateCoal(40f);
-        UpdateGold(1000f);
-        UpdateFood(10f);
+        UpdateWood(150f);
+        UpdateIron(0f);
+        UpdateCoal(0f);
+        UpdateGold(0f);
 
     }
 
@@ -49,8 +50,8 @@ public class ResourcesPanel : MonoBehaviour
     }
 
     //Resources
-    public float GetGold() {
-        return gold;
+    public float GetWood() {
+        return wood;
     }
 
     public float GetIron() {
@@ -61,16 +62,17 @@ public class ResourcesPanel : MonoBehaviour
         return coal;
     }
 
-    public float GetFood()
-    {
-        return food;
+    public float GetGold() {
+        return gold;
     }
 
+
     //Resources
-    public void UpdateGold(float amount)
-    {
-        gold += amount;
-        UpdateGoldText(gold);
+
+    public void UpdateWood(float amount) {
+        wood += amount;
+        UpdateWoodText(wood);
+
     }
 
     public void UpdateIron(float amount)
@@ -84,31 +86,38 @@ public class ResourcesPanel : MonoBehaviour
     {
         coal += amount;
         UpdateCoalText(coal);
-
     }
 
-    public void UpdateFood(float amount)
-    {
-        food += amount;
-        UpdateFoodText(food);
-
+    public void UpdateGold(float amount) {
+        gold += amount;
+        UpdateGoldText(gold);
     }
-    private void UpdateIronText(float t)
-    {
+
+    private void UpdateWoodText(float t) {
+        woodText.text = t.ToString();
+    }
+
+    private void UpdateIronText(float t) {
         ironText.text = t.ToString();
     }
 
-    private void UpdateCoalText(float t)
-    {
+    private void UpdateCoalText(float t) {
         coalText.text = t.ToString();
     }
 
-    private void UpdateGoldText(float t)
-    {
+    private void UpdateGoldText(float t) {
         goldText.text = t.ToString();
     }
-    private void UpdateFoodText(float t)
-    {
-        foodText.text = t.ToString();
+
+
+    private void UpdateAll(Vector4 delta) {
+        UpdateWood(delta.w);
+        UpdateIron(delta.x);
+        UpdateCoal(delta.y);
+        UpdateGold(delta.z);
+    }
+
+    private bool CanAfford(Vector4 cost) {
+        return cost.w < wood && cost.x < iron && cost.y < coal && cost.z < gold;
     }
 }
