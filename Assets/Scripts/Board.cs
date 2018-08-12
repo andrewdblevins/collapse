@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Board : MonoBehaviour {
 
-    public enum Building { None, Mine, House, Stabilizer, Farm, Gold, Void};
+    public enum Building { None, Mine, House, Stabilizer, Farm, Gold, Iron, Coal, Void};
     public Building selectedType = Building.None;
 
     public GameObject TilePrefab;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum InfluenceType {stabilization, gold, mine, farm}
+public enum InfluenceType {stabilization, gold, iron, coal, mine, farm}
 
 public class Tile : MonoBehaviour {
 
@@ -227,7 +227,10 @@ public class Tile : MonoBehaviour {
                     if (building == Board.Building.Stabilizer) reduction += 0.9f;
                     return reduction;
                 }
-            case InfluenceType.gold : {
+            case InfluenceType.gold :
+            case InfluenceType.iron :
+            case InfluenceType.coal : 
+                {
                     if (building == Board.Building.Mine) {
                         // Gather tilesWithinDistance(1) for houses and gather house influence
                         float houseEffect = 0f;
@@ -238,6 +241,7 @@ public class Tile : MonoBehaviour {
                     }
                     return 0.0f;
                 }
+
             case InfluenceType.mine: {
                     if (building == Board.Building.House) {
                         return 0.5f;
@@ -283,11 +287,25 @@ public class Tile : MonoBehaviour {
 
     public float ironHarvest()
     {
+        if (building == Board.Building.Iron) {
+            float iron = 0.0f;
+            foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1)) {
+                iron += entry.Key.getInfluence(InfluenceType.iron);
+            }
+            return iron * Globals.Instance.IronMultiplier;
+        }
         return 0.0f;
     }
 
     public float coalHarvest()
     {
+        if (building == Board.Building.Coal) {
+            float coal = 0.0f;
+            foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1)) {
+                coal += entry.Key.getInfluence(InfluenceType.coal);
+            }
+            return coal * Globals.Instance.CoalMultiplier;
+        }
         return 0.0f;
     }
 
