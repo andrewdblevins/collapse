@@ -263,8 +263,15 @@ public class Tile : MonoBehaviour {
     }
 
     public void turnHappens() {
-        if (UnityEngine.Random.value < hpLossRisk()) {
+        float randomDraw;
+        randomDraw = UnityEngine.Random.value;
+
+        if (randomDraw < hpLossRisk()) {
             hp -= 1;
+        }else{
+            if(randomDraw > 0.99){
+                hp += 1;
+            }
         }
 
         if (hp <= 0) {
