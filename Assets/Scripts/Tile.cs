@@ -234,9 +234,9 @@ public class Tile : MonoBehaviour
             int neighHp = neighborTilesWithHp[0].getHp();
             //hp = neighHp;
             if (closerToEdge(neighborTilesWithHp[0])) {
-                hp = UnityEngine.Random.Range(Mathf.Max(neighHp - 2, 0), neighHp);
+                hp = UnityEngine.Random.Range(Mathf.Max(neighHp - 2, board.getMinHeight()), neighHp);
             } else {
-                hp = UnityEngine.Random.Range(neighHp, Mathf.Min(neighHp + 2, 15));
+                hp = UnityEngine.Random.Range(neighHp, Mathf.Min(neighHp + 2, board.getMaxHeight()));
             }
             //Debug.Log("Tile: " + name);
             //Debug.Log("Neighbor " + neighborTilesWithHp[0].name + " hp: " + neighHp.ToString());
