@@ -15,6 +15,8 @@ public class Tile : MonoBehaviour
     public List<SpriteRenderer> OreImages;
     public List<SpriteRenderer> BuildingImages;
 
+    public List<SpriteRenderer> UpArrowImages;
+
     private Board board;
 
     private Board.Building building = Board.Building.None;

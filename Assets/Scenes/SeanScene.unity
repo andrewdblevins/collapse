@@ -2713,6 +2713,18 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1730942352518632, guid: 2dad3b2b3463ae840a40720ef146a432, type: 2}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1091139303339974, guid: 2dad3b2b3463ae840a40720ef146a432, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1772330626190494, guid: 2dad3b2b3463ae840a40720ef146a432, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884640687471968, guid: 2dad3b2b3463ae840a40720ef146a432, type: 2}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
