@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Board : MonoBehaviour {
 
-    public enum Building { None, Mine, House, Stabilizer, Saw, Wood, Gold, Iron, Coal, Void};
+    public enum Building { None, Mine, House, Stabilizer, Saw, Wood, Gold, Iron, Coal, Void, Upgrade};
     public Building selectedType = Building.None;
 
     public GameObject TilePrefab;
@@ -173,7 +173,19 @@ public class Board : MonoBehaviour {
     }
 
     public void TileClicked(Tile tile) {
-        if (selectedType != Building.None && tile.IsEmpty() && ResourcesPanel.Instance.CanAfford( GetCost(selectedType))) {
+        if (selectedType == Building.Upgrade) {
+            switch (tile.GetBuildingType()) {
+                case Building.Saw:
+                case Building.Mine:
+                case Building.House:
+                case Building.Stabilizer:
+                    if (ResourcesPanel.Instance.CanAfford(GetUpgradeCost(tile.GetBuildingType()))) {
+                        ResourcesPanel.Instance.UpdateAll(-GetCost(tile.GetBuildingType()));
+                        //tile.SetBuilding(selectedType);
+                    }
+                    break;
+            }
+        } else if (selectedType != Building.None && ResourcesPanel.Instance.CanAfford( GetCost(selectedType))) {
             ResourcesPanel.Instance.UpdateAll(-GetCost(selectedType));
             tile.SetBuilding(selectedType);
             //SetSelectedType(Building.None);
@@ -187,6 +199,18 @@ public class Board : MonoBehaviour {
             case Building.Mine: return Globals.Instance.MineCost;
             case Building.House: return Globals.Instance.HouseCost;
             case Building.Stabilizer: return Globals.Instance.StabilizerCost;
+        }
+
+        return Vector4.zero;
+    }
+
+    private Vector4 GetUpgradeCost(Building b) {
+        switch (b) {
+            case Building.None: return Vector4.zero;
+            case Building.Saw: return Globals.Instance.Saw2Cost;
+            case Building.Mine: return Globals.Instance.Mine2Cost;
+            case Building.House: return Globals.Instance.House2Cost;
+            case Building.Stabilizer: return Globals.Instance.Stabilizer2Cost;
         }
 
         return Vector4.zero;

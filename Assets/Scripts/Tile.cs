@@ -162,6 +162,10 @@ public class Tile : MonoBehaviour
         }
     }
 
+    public Board.Building GetBuildingType() {
+        return building;
+    }
+
     public bool IsEmpty() {
         return building == Board.Building.None;
     }
