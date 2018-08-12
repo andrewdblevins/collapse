@@ -605,7 +605,7 @@ MonoBehaviour:
   Mine2Cost: {x: 0, y: 25, z: 25, w: 0}
   House2Cost: {x: 10, y: 10, z: 10, w: 0}
   Stabilizer2Cost: {x: 0, y: 0, z: 25, w: 25}
-  DecayRate: 100
+  DecayRate: 20
 --- !u!1001 &345508695
 Prefab:
   m_ObjectHideFlags: 0

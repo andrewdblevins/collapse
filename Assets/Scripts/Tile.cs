@@ -218,8 +218,8 @@ public class Tile : MonoBehaviour
                 BuildingImages[6].gameObject.SetActive(true);
                 break;
             case Board.Building.House2:
-                BuildingImages[0].gameObject.SetActive(true);
-                BuildingImages[1].gameObject.SetActive(false);
+                BuildingImages[0].gameObject.SetActive(false);
+                BuildingImages[1].gameObject.SetActive(true);
                 BuildingImages[8].gameObject.SetActive(true);
                 break;
             case Board.Building.Mine2:
