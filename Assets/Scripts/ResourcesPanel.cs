@@ -37,9 +37,9 @@ public class ResourcesPanel : MonoBehaviour
     void Start()
     {
         UpdateWood(150f);
-        UpdateIron(0f);
-        UpdateCoal(0f);
-        UpdateGold(0f);
+        UpdateIron(150f);
+        UpdateCoal(150f);
+        UpdateGold(150f);
 
     }
 
