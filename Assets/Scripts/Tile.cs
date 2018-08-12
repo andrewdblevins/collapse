@@ -71,7 +71,11 @@ public class Tile : MonoBehaviour
 
 
 
-
+    void Start(){
+        //if(hp > 0){
+        //    hp += 5;
+        //}
+    }
 
     void Update()
     {
