@@ -246,6 +246,7 @@ GameObject:
   - component: {fileID: 332015166}
   - component: {fileID: 332015165}
   - component: {fileID: 332015164}
+  - component: {fileID: 332015167}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -313,6 +314,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &332015167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 332015163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c38e92e71dac494cba0568af04163b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GoldMultiplier: 3
+  MineCost: 50
+  HouseCost: 25
+  StabilizerCost: 100
+  DecayRate: 100
 --- !u!1001 &345508695
 Prefab:
   m_ObjectHideFlags: 0
@@ -718,9 +735,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31fbeb7e09b9d4ed3aa2e376ad6dc08f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gold: 10
-  iron: 50
-  coal: 100
   ironText: {fileID: 1838202288}
   coalText: {fileID: 361360272}
   goldText: {fileID: 1189346220}

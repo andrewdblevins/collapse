@@ -251,7 +251,7 @@ public class Tile : MonoBehaviour {
             foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1)) {
                 gold += entry.Key.getInfluence(InfluenceType.gold);
             }
-            return gold;
+            return gold * Globals.Instance.GoldMultiplier;
         }
         return 0.0f;
     }
@@ -268,7 +268,7 @@ public class Tile : MonoBehaviour {
                                               InfluenceType.stabilization));
         }
 
-        modifiedHpLossRisk = risk * 100;
+        modifiedHpLossRisk = risk * Globals.Instance.DecayRate;
         return modifiedHpLossRisk;
     }
 
