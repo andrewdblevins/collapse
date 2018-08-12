@@ -137,8 +137,8 @@ public class Board : MonoBehaviour {
     }
 
     public void TileClicked(Tile tile) {
-        if (selectedType != Building.None) {
-            tile.AddBuilding(selectedType);
+        if (selectedType != Building.None && tile.IsEmpty()) {
+            tile.SetBuilding(selectedType);
             SetSelectedType(Building.None);
         }
     }
