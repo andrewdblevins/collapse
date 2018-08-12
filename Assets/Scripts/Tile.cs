@@ -239,9 +239,9 @@ public class Tile : MonoBehaviour {
             hp -= 1;
         }
 
-        if (hp == 0) {
+        if (hp <= 0) {
             container.gameObject.SetActive(false);
-        } else if (hp == 1) {
+        } else if (hp <= 1) {
             foreach (SpriteRenderer s in Images) {
                 s.color = Color.red;
             }
