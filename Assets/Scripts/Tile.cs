@@ -23,6 +23,7 @@ public class Tile : MonoBehaviour {
     private int tileY;
     private const int maxDampeningDistance = 3;
     private const float baseHpLossRisk = 0.03f;
+    private float modifiedHpLossRisk = baseHpLossRisk;
 
     private Tile xMinusTile = null;
     private Tile xPlusTile = null;
@@ -267,9 +268,8 @@ public class Tile : MonoBehaviour {
                                               InfluenceType.stabilization));
         }
 
-        risk = risk * 100;
-
-        return risk;
+        modifiedHpLossRisk = risk * 100;
+        return modifiedHpLossRisk;
     }
 
     public void turnHappens() {
