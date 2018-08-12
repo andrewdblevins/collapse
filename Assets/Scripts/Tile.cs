@@ -57,11 +57,11 @@ public class Tile : MonoBehaviour
 
         if (UnityEngine.Random.value < 0.1f)
         {
-            foreach (SpriteRenderer s in OreImages)
-            {
-                building = Board.Building.Gold;
-                s.gameObject.SetActive(true);
-            }
+            building = Board.Building.Iron;
+            OreImages[0].gameObject.SetActive(true);
+        } else if (UnityEngine.Random.value < 0.05f) {
+            building = Board.Building.Coal;
+            OreImages[1].gameObject.SetActive(true);
         }
     }
 
