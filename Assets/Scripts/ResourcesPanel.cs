@@ -3,13 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ResourcesPanelBehavior : MonoBehaviour
+public class ResourcesPanel : MonoBehaviour
 {
 
     public Text ironText;
     public Text coalText;
     public Text goldText;
+    public static ResourcesPanel Instance { get; private set; }
 
+    void Awake()
+    {
+
+        // First we check if there are any other instances conflicting
+        if (Instance != null && Instance != this)
+        {
+            // If that is the case, we destroy other instances
+            Destroy(gameObject);
+        }
+
+        // Here we save our singleton instance
+        Instance = this;
+
+    }
     // Use this for initialization
     void Start()
     {

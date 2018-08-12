@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Board : MonoBehaviour {
+    //Resouces
+    public float gold = 10f;
+    public float iron = 50f;
+    public float coal = 100f;
 
     public enum Building { None, Mine, House, Stabilizer};
     public Building selectedType = Building.None;
@@ -100,6 +104,11 @@ public class Board : MonoBehaviour {
         EndTurn();
 	}
 
+    void Update()
+    {
+
+    }
+
     public void EndTurn() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < width; j++) {
@@ -142,5 +151,23 @@ public class Board : MonoBehaviour {
             SetSelectedType(Building.None);
         }
     }
+    //Resources
+    public void ChangeGold(float amount)
+    {
+        gold += amount;
+        ResourcesPanel.Instance.updateGold(gold);
+    }
 
+    public void ChangeIron(float amount)
+    {
+        iron += amount;
+        ResourcesPanel.Instance.updateIron(iron);
+    }
+
+
+    public void ChangeCoal(float amount)
+    {
+        coal += amount;
+        ResourcesPanel.Instance.updateCoal(coal);
+    }
 }
