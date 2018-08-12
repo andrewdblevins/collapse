@@ -83,18 +83,17 @@ public class Tile : MonoBehaviour {
     }
 
     private void SetHeight() {
-        float height = (hp * 0.05f);// - 0.1f;
+        float height = (hp * 0.05f);
         container.localPosition = new Vector3(0f, height, 0f);
     }
 
     public void Init() {
-        // SetHeight(UnityEngine.Random.Range(-0.1f, 0.1f));
         SetHeight();
 
         if (UnityEngine.Random.value < 0.33f) {
-            Images[1].gameObject.SetActive(true);
+            Dodads[0].gameObject.SetActive(true);
             if (UnityEngine.Random.value < 0.33f) {
-                Images[2].gameObject.SetActive(true);
+                Dodads[1].gameObject.SetActive(true);
             }
         }
 
@@ -110,14 +109,14 @@ public class Tile : MonoBehaviour {
             buildings.Add(b);
             switch (b) {
                 case Board.Building.House:
-                    Images[4].gameObject.SetActive(true);
-                    Images[5].gameObject.SetActive(true);
+                    BuildingImages[0].gameObject.SetActive(true);
+                    BuildingImages[1].gameObject.SetActive(true);
                     break;
                 case Board.Building.Mine:
-                    Images[4].gameObject.SetActive(true);
+                    BuildingImages[2].gameObject.SetActive(true);
                     break;
                 case Board.Building.Stabilizer:
-                    Images[3].gameObject.SetActive(true);
+                    BuildingImages[3].gameObject.SetActive(true);
                     break;
                 default: break;
             }
