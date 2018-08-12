@@ -16,7 +16,7 @@ public class Tile : MonoBehaviour {
 
     private Board board;
 
-    private HashSet<Board.Building> buildings = new HashSet<Board.Building>();
+    private Board.Building building = Board.Building.None;
 
     private int hp = -1;
     private int tileX;
@@ -56,23 +56,25 @@ public class Tile : MonoBehaviour {
         }
     }
 
-    public void AddBuilding(Board.Building b) {
-        if (!buildings.Contains(b)) {
-            buildings.Add(b);
-            switch (b) {
-                case Board.Building.House:
-                    BuildingImages[0].gameObject.SetActive(true);
-                    BuildingImages[1].gameObject.SetActive(true);
-                    break;
-                case Board.Building.Mine:
-                    BuildingImages[2].gameObject.SetActive(true);
-                    break;
-                case Board.Building.Stabilizer:
-                    BuildingImages[3].gameObject.SetActive(true);
-                    break;
-                default: break;
-            }
+    public void SetBuilding(Board.Building b) {
+        building = b;
+        switch (b) {
+            case Board.Building.House:
+                BuildingImages[0].gameObject.SetActive(true);
+                BuildingImages[1].gameObject.SetActive(true);
+                break;
+            case Board.Building.Mine:
+                BuildingImages[2].gameObject.SetActive(true);
+                break;
+            case Board.Building.Stabilizer:
+                BuildingImages[3].gameObject.SetActive(true);
+                break;
+            default: break;
         }
+    }
+
+    public bool IsEmpty() {
+        return building == Board.Building.None;
     }
 
     public void Click() {
