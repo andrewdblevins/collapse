@@ -22,7 +22,7 @@ public class Board : MonoBehaviour {
     private const int maxHeight = 15 < width ? width : 15;
     private const int minHeight = 0;
     private const float probabilityHeightAssign = 7.0f / (width * width);
-
+    private float totalRisk = 1f;
     public int getMaxHeight() {
         return maxHeight;
     }
@@ -125,17 +125,20 @@ public class Board : MonoBehaviour {
     public void EndTurn() {
         tickTimer = tick;
         float totalGoldHarvest = 0f;
+        float newtotalRisk = 0f;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < width; j++) {
                 Tiles[i][j].turnHappens();
                 totalGoldHarvest += Tiles[i][j].goldHarvest();
-
+                newtotalRisk += Tiles[i][j].modifiedHpLossRisk;
+                Tiles[i][j].normalizedHpLossRisk = Tiles[i][j].modifiedHpLossRisk / (totalRisk * 1f);
                 ResourcesPanel.Instance.UpdateGold(Tiles[i][j].goldHarvest());
                 ResourcesPanel.Instance.UpdateWood(Tiles[i][j].woodHarvest());
                 ResourcesPanel.Instance.UpdateIron(Tiles[i][j].ironHarvest());
                 ResourcesPanel.Instance.UpdateCoal(Tiles[i][j].coalHarvest());
             }
         }
+        newtotalRisk = totalRisk;
         Debug.Log("totalGoldHarvest: " + totalGoldHarvest);
     }
 
