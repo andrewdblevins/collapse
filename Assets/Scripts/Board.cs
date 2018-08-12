@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Board : MonoBehaviour {
 
-    public enum Building { None, Mine, House, Stabilizer, Gold};
+    public enum Building { None, Mine, House, Stabilizer, Gold, Void};
     public Building selectedType = Building.None;
 
     public GameObject TilePrefab;
@@ -127,13 +127,13 @@ public class Board : MonoBehaviour {
                     hintText.text = "";
                     break;
                 case Board.Building.House:
-                    hintText.text = "Build a House next to Mines to make them mine more";
+                    hintText.text = "Cost 50:   Build a House next to Mines to make them mine more";
                     break;
                 case Board.Building.Mine:
-                    hintText.text = "Build a Mine next to ore";
+                    hintText.text = "Cost 100:   Build a Mine next to ore";
                     break;
                 case Board.Building.Stabilizer:
-                    hintText.text = "Build a Stabilizer to prevent tiles from falling";
+                    hintText.text = "Cost 200:   Build a Stabilizer to prevent tiles from falling";
                     break;
                 default: break;
             }
@@ -154,7 +154,7 @@ public class Board : MonoBehaviour {
         switch (b) {
             case Building.None: return 0f;
             case Building.Mine: return 100f;
-            case Building.House: return 150f;
+            case Building.House: return 50f;
             case Building.Stabilizer: return 200f;
             case Building.Gold: return 0f;
         }

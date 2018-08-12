@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum InfluenceType {stabilization, gold}
+public enum InfluenceType {stabilization, gold, mine}
 
 public class Tile : MonoBehaviour {
 
@@ -226,7 +226,17 @@ public class Tile : MonoBehaviour {
             case InfluenceType.gold : {
                     if (building == Board.Building.Mine) {
                         // Gather tilesWithinDistance(1) for houses and gather house influence
-                        return 1.0f;
+                        float houseEffect = 0f;
+                        foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1)) {
+                            houseEffect += entry.Key.getInfluence(InfluenceType.mine);
+                        }
+                        return 1.0f + houseEffect;
+                    }
+                    return 0.0f;
+                }
+            case InfluenceType.mine: {
+                    if (building == Board.Building.House) {
+                        return 0.5f;
                     }
                     return 0.0f;
                 }
@@ -268,6 +278,7 @@ public class Tile : MonoBehaviour {
         }
 
         if (hp <= 0) {
+            building = Board.Building.Void;
             container.gameObject.SetActive(false);
         } else if (hp <= 1) {
             foreach (SpriteRenderer s in Images) {
