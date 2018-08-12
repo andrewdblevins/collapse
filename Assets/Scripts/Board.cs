@@ -166,7 +166,7 @@ public class Board : MonoBehaviour {
         if (selectedType != Building.None && tile.IsEmpty() && ResourcesPanel.Instance.GetGold() >= GetCost(selectedType)) {
             ResourcesPanel.Instance.UpdateGold(-GetCost(selectedType));
             tile.SetBuilding(selectedType);
-            SetSelectedType(Building.None);
+            //SetSelectedType(Building.None);
         }
     }
 
