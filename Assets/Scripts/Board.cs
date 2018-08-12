@@ -16,6 +16,30 @@ public class Board : MonoBehaviour {
     List<List<Tile>> Tiles = new List<List<Tile>>();
 
     private const int width = 15;
+    private const int maxHeight = 15 < width ? width : 15;
+    private const int minHeight = 0;
+    private const float probabilityHeightAssign = 7.0f / (width * width);
+
+    private int? getHeight(int x, int y)
+    {
+        //Corners will always be very low
+        if ((x == 0 || x == width - 1) && (y == 0 || y == width - 1))
+        {
+            return minHeight;
+        }
+        if (UnityEngine.Random.value < probabilityHeightAssign) {
+            int minDistanceFromEdge = Mathf.Min(
+                width - 1 - x,
+                x,
+                width - 1 - y,
+                y
+            );
+
+            return UnityEngine.Random.Range(minDistanceFromEdge + minHeight + 2, maxHeight);
+        }
+        return null;
+
+    }
 
 	void Start () {
 		for (int i = 0; i < width; i++) {
@@ -33,7 +57,11 @@ public class Board : MonoBehaviour {
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < width; j++) {
-                Tiles[i][j].initTile(i, j, Tiles, this);
+
+                // Generate HP, with hp more likely to be higher near middle of map
+                // Only give HP to some tiles, and then have the rest smooth themselves out
+
+                Tiles[i][j].initTile(j, i, Tiles, this, getHeight(i, j));
             }
         }
         for (int i = 0; i < width; i++)
@@ -43,6 +71,33 @@ public class Board : MonoBehaviour {
                 Tiles[i][j].initTileDistances();
             }
         }
+
+        //Apply tile height smoothing
+        int iCnt = 0;
+        while (iCnt < 400) {
+            bool ifSmoothed = Tiles[UnityEngine.Random.Range(minHeight, maxHeight)][UnityEngine.Random.Range(minHeight, maxHeight)].smoothHp();
+            iCnt += 1;
+        }
+        iCnt = 0;
+        while (iCnt < 40) {
+            bool allSmoothed = true;
+            
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+
+                    // Generate HP, with hp more likely to be higher near middle of map
+                    // Only give HP to some tiles, and then have the rest smooth themselves out
+
+                    bool ifSmoothed = Tiles[i][j].smoothHp();
+                    if (!ifSmoothed) allSmoothed = false;
+                }
+            }
+            iCnt += 1;
+            if (allSmoothed) break;
+        }
+        EndTurn();
 	}
 
     public void EndTurn() {
