@@ -10,74 +10,27 @@ public class Tile : MonoBehaviour {
     public Transform container;
     public List<SpriteRenderer> Images;
 
-    private int hp;
+    private int hp = -1;
     private int tileX;
     private int tileY;
-    private int maxDampeningDistance = 3;
-    private float baseHpLossRisk = 0.05f;
+    private const int maxDampeningDistance = 3;
+    private const float baseHpLossRisk = 0.05f;
 
-    private float stabilizationBaseHpReduction = 1.0f;
+    private const float stabilizationBaseHpReduction = 1.0f;
 
     private Tile xMinusTile = null;
     private Tile xPlusTile = null;
     private Tile yMinusTile = null;
     private Tile yPlusTile = null;
 
+    private int minTileListX;
+    private int maxTileListX;
+    private int minTileListY;
+    private int maxTileListY;
+
     //Cache of tiles w/ distance from this tile, w/ an additional filter of maxdistance as first key
     private Dictionary<int, Dictionary<Tile, int>> tileDistanceCache = new Dictionary<int, Dictionary<Tile, int>> { };
 
-    private List<Tile> immediateTiles() {
-        List<Tile> tiles = new List<Tile> { xMinusTile, xPlusTile, yMinusTile, yPlusTile };
-        tiles.RemoveAll(item => item == null);
-        return tiles;
-    }
-
-    public Dictionary<Tile, int> tilesWithinDistanceCalcImpl(int distance, Dictionary<Tile, int> existingTiles = null) {
-        //Debug.Log("Starting distance: " + distance.ToString());
-        if (existingTiles == null) {
-            existingTiles = new Dictionary<Tile, int> { };
-        }
-
-        List<Tile> tilesToRecurse = new List<Tile> { };
-        foreach (var tile in immediateTiles()) {
-            //Debug.Log("Thinking of adding tile: " + tile.GetHashCode());
-            //Debug.Log("Distance: " + distance.ToString());
-            //Debug.Log("Contains: " + existingTiles.ContainsKey(tile).ToString());
-            if (existingTiles.ContainsKey(tile) && existingTiles[tile] <= distance + 1)
-                continue;
-
-            //Debug.Log("Adding tile: " + tile.GetHashCode());
-            //Debug.Log("Distance: " + distance.ToString());
-            existingTiles[tile] = distance + 1;
-            tilesToRecurse.Add(tile);
-        }
-
-
-        if (distance > 1) {
-            foreach (var tile in tilesToRecurse)
-            {
-                existingTiles = tile.tilesWithinDistanceCalcImpl(distance - 1, existingTiles);
-            }
-        }
-        return existingTiles;
-    }
-
-    private Dictionary<Tile, int> tilesWithinDistance(int distance) {
-        if (distance <= 0) return new Dictionary<Tile, int> { };
-
-        if (!tileDistanceCache.ContainsKey(distance)) {
-            //Force creation of all caches with smaller distances first if they don't exist
-            Dictionary<Tile, int> tilesWithinDistanceMinusOne = tilesWithinDistance(distance - 1);
-            //tileDistanceCache[distance] = tilesWithinDistanceCalcImpl(distance, tilesWithinDistanceMinusOne);
-            tileDistanceCache[distance] = tilesWithinDistanceCalcImpl(distance);
-        }
-        return tileDistanceCache[distance];
-    }
-
-    private void SetHeight() {
-        float height = (hp * 0.05f);// - 0.1f;
-        container.localPosition = new Vector3(0f, height, 0f);
-    }
 
     public void Init() {
         // SetHeight(UnityEngine.Random.Range(-0.1f, 0.1f));
@@ -94,23 +47,23 @@ public class Tile : MonoBehaviour {
     }
 
     public void OnMouseDown() {
-        Debug.Log("Clicked " + gameObject.name);
+        Debug.Log("Clicked " + gameObject.name + " with hp " + getHp().ToString());
     }
 
     public void OnMouseEnter() {
-        foreach (SpriteRenderer s in Images) {
-            s.color = Color.yellow;
-        }
+        //foreach (SpriteRenderer s in Images) {
+        //    s.color = Color.yellow;
+        //}
     }
 
     public void OnMouseExit() {
-        foreach (SpriteRenderer s in Images) {
-            if (hp == 1) {
-                s.color = Color.red;
-            } else {
-                s.color = Color.white;
-            }
-        }
+        //foreach (SpriteRenderer s in Images) {
+        //    if (hp == 1) {
+        //        s.color = Color.red;
+        //    } else {
+        //        s.color = Color.white;
+        //    }
+        //}
     }
 
     public int getHp() {
@@ -121,16 +74,16 @@ public class Tile : MonoBehaviour {
         return hp > 0;
     }
 
-    public void initTile(int x, int y, List<List<Tile>> tileList) {
+    public void initTile(int x, int y, List<List<Tile>> tileList, int? initHp=-1) {
         tileX = x;
         tileY = y;
 
-        hp = 10;
+        if (initHp != null) hp = (int)initHp;
 
-        int minTileListX = 0;
-        int maxTileListX = tileList[0].Count - 1;
-        int minTileListY = 0;
-        int maxTileListY = tileList.Count - 1;
+        minTileListX = 0;
+        maxTileListX = tileList[0].Count - 1;
+        minTileListY = 0;
+        maxTileListY = tileList.Count - 1;
 
         if (x > minTileListX) {
             xMinusTile = tileList[y][x-1];
@@ -148,6 +101,63 @@ public class Tile : MonoBehaviour {
         }
 
         Init();
+    }
+
+    public bool closerToEdge(Tile tile) {
+        return distanceToEdge() < tile.distanceToEdge();
+    }
+
+    public int distanceToEdge() {
+        return Mathf.Min(maxTileListX - 1 - tileX,
+            tileX - minTileListX,
+            maxTileListY - 1 - tileY,
+            tileY - minTileListY);
+    } 
+
+    // If our height is null, smooth out the height using neighboring tiles
+    // Return False if we failed to do smoothing (if no neighboring tiles had a height)
+    public bool smoothHp() {
+        if (hp >= 0) { return true; }
+        List<Tile> neighborTilesWithHp = immediateTiles();
+        neighborTilesWithHp.RemoveAll(item => item.getHp() < 0);
+
+        //Debug.Log("Attempting to set height");
+        //Debug.Log(neighborTilesWithHp.Count.ToString());
+
+        if (neighborTilesWithHp.Count > 1) {
+            int totalHp = 0;
+            foreach(Tile tile in neighborTilesWithHp) {
+                totalHp += tile.getHp();
+            }
+            hp = totalHp / neighborTilesWithHp.Count;
+            //foreach (SpriteRenderer s in Images)
+            //{
+            //    s.color = Color.grey;
+            //}
+            //SetHeight();
+            return true;
+        }
+        else if (neighborTilesWithHp.Count == 1) {
+            int neighHp = neighborTilesWithHp[0].getHp();
+            //hp = neighHp;
+            if (closerToEdge(neighborTilesWithHp[0])) {
+                hp = UnityEngine.Random.Range(Mathf.Max(neighHp - 2, 0), neighHp);
+            } else {
+                hp = UnityEngine.Random.Range(neighHp, Mathf.Min(neighHp + 2, 15));
+            }
+            //Debug.Log("Tile: " + name);
+            //Debug.Log("Neighbor " + neighborTilesWithHp[0].name + " hp: " + neighHp.ToString());
+            //Debug.Log("Set hp: " + hp.ToString());
+            //foreach (SpriteRenderer s in Images)
+            //{
+            //    s.color = Color.red;
+            //}
+            //SetHeight();
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     // Should call this in board constructor after all tiles are init-created, so as to speed up first loop later
@@ -203,6 +213,67 @@ public class Tile : MonoBehaviour {
         }
 
         SetHeight();
+    }
+
+    private List<Tile> immediateTiles()
+    {
+        List<Tile> tiles = new List<Tile> { xMinusTile, xPlusTile, yMinusTile, yPlusTile };
+        tiles.RemoveAll(item => item == null);
+        return tiles;
+    }
+
+    public Dictionary<Tile, int> tilesWithinDistanceCalcImpl(int distance, Dictionary<Tile, int> existingTiles = null)
+    {
+        //Debug.Log("Starting distance: " + distance.ToString());
+        if (existingTiles == null)
+        {
+            existingTiles = new Dictionary<Tile, int> { };
+        }
+
+        List<Tile> tilesToRecurse = new List<Tile> { };
+        foreach (var tile in immediateTiles())
+        {
+            //Debug.Log("Thinking of adding tile: " + tile.GetHashCode());
+            //Debug.Log("Distance: " + distance.ToString());
+            //Debug.Log("Contains: " + existingTiles.ContainsKey(tile).ToString());
+            if (existingTiles.ContainsKey(tile) && existingTiles[tile] <= distance + 1)
+                continue;
+
+            //Debug.Log("Adding tile: " + tile.GetHashCode());
+            //Debug.Log("Distance: " + distance.ToString());
+            existingTiles[tile] = distance + 1;
+            tilesToRecurse.Add(tile);
+        }
+
+
+        if (distance > 1)
+        {
+            foreach (var tile in tilesToRecurse)
+            {
+                existingTiles = tile.tilesWithinDistanceCalcImpl(distance - 1, existingTiles);
+            }
+        }
+        return existingTiles;
+    }
+
+    private Dictionary<Tile, int> tilesWithinDistance(int distance)
+    {
+        if (distance <= 0) return new Dictionary<Tile, int> { };
+
+        if (!tileDistanceCache.ContainsKey(distance))
+        {
+            //Force creation of all caches with smaller distances first if they don't exist
+            Dictionary<Tile, int> tilesWithinDistanceMinusOne = tilesWithinDistance(distance - 1);
+            //tileDistanceCache[distance] = tilesWithinDistanceCalcImpl(distance, tilesWithinDistanceMinusOne);
+            tileDistanceCache[distance] = tilesWithinDistanceCalcImpl(distance);
+        }
+        return tileDistanceCache[distance];
+    }
+
+    private void SetHeight()
+    {
+        float height = (getHp() * 0.05f);// - 0.1f;
+        container.localPosition = new Vector3(0f, height, 0f);
     }
 
     public override int GetHashCode() {
