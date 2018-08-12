@@ -390,6 +390,29 @@ public class Tile : MonoBehaviour
                 }
             case InfluenceType.gold :
             case InfluenceType.iron :
+                {
+                    if (building == Board.Building.Mine)
+                    {
+                        // Gather tilesWithinDistance(1) for houses and gather house influence
+                        float houseEffect = 0f;
+                        foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1))
+                        {
+                            houseEffect += entry.Key.getInfluence(InfluenceType.mine);
+                        }
+                        return 1.0f + houseEffect;
+                    }
+                    else if (building == Board.Building.Mine2)
+                    {
+                        // Gather tilesWithinDistance(1) for houses and gather house influence
+                        float houseEffect = 0f;
+                        foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1))
+                        {
+                            houseEffect += entry.Key.getInfluence(InfluenceType.mine);
+                        }
+                        return 2.0f + 2 * houseEffect;
+                    }
+                    return 0.0f;
+                }
             case InfluenceType.coal : 
                 {
                     if (building == Board.Building.Mine) {
@@ -399,6 +422,16 @@ public class Tile : MonoBehaviour
                             houseEffect += entry.Key.getInfluence(InfluenceType.mine);
                         }
                         return 1.0f + houseEffect;
+                    }
+                    else if (building == Board.Building.Mine2)
+                    {
+                        // Gather tilesWithinDistance(1) for houses and gather house influence
+                        float houseEffect = 0f;
+                        foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1))
+                        {
+                            houseEffect += entry.Key.getInfluence(InfluenceType.mine);
+                        }
+                        return 2.0f + 2 * houseEffect;
                     }
                     return 0.0f;
                 }
@@ -417,6 +450,9 @@ public class Tile : MonoBehaviour
             case InfluenceType.mine: {
                     if (building == Board.Building.House) {
                         return 0.5f;
+                    } else if (building == Board.Building.House2)
+                    {
+                        return 1.0f;
                     }
                     return 0.0f;
                 }
@@ -492,6 +528,7 @@ public class Tile : MonoBehaviour
                                               entry.Value, 
                                               InfluenceType.stabilization));
         }
+        risk *= (1.0f - getInfluence(InfluenceType.stabilization));
 
         modifiedHpLossRisk = risk * Globals.Instance.DecayRate;
 
