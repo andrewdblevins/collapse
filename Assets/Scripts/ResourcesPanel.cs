@@ -110,14 +110,15 @@ public class ResourcesPanel : MonoBehaviour
     }
 
 
-    private void UpdateAll(Vector4 delta) {
-        UpdateWood(delta.w);
-        UpdateIron(delta.x);
-        UpdateCoal(delta.y);
-        UpdateGold(delta.z);
+    public void UpdateAll(Vector4 delta) {
+        UpdateWood(delta.x);
+        UpdateIron(delta.y);
+        UpdateCoal(delta.z);
+        UpdateGold(delta.w);
     }
 
-    private bool CanAfford(Vector4 cost) {
-        return cost.w < wood && cost.x < iron && cost.y < coal && cost.z < gold;
+    public bool CanAfford(Vector4 cost) {
+        Debug.Log("Can afford " + cost);
+        return cost.x <= wood && cost.y <= iron && cost.z <= coal && cost.w <= gold;
     }
 }

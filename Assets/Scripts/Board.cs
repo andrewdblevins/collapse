@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Board : MonoBehaviour {
 
-    public enum Building { None, Mine, House, Stabilizer, Farm, Gold, Iron, Coal, Void};
+    public enum Building { None, Mine, House, Stabilizer, Saw, Wood, Gold, Iron, Coal, Void};
     public Building selectedType = Building.None;
 
     public GameObject TilePrefab;
@@ -131,7 +131,7 @@ public class Board : MonoBehaviour {
                 totalGoldHarvest += Tiles[i][j].goldHarvest();
 
                 ResourcesPanel.Instance.UpdateGold(Tiles[i][j].goldHarvest());
-                ResourcesPanel.Instance.UpdateFood(Tiles[i][j].foodHarvest());
+                ResourcesPanel.Instance.UpdateWood(Tiles[i][j].woodHarvest());
                 ResourcesPanel.Instance.UpdateIron(Tiles[i][j].ironHarvest());
                 ResourcesPanel.Instance.UpdateCoal(Tiles[i][j].coalHarvest());
             }
@@ -151,8 +151,11 @@ public class Board : MonoBehaviour {
                 case Board.Building.None:
                     hintText.text = "";
                     break;
+                case Board.Building.Saw:
+                    hintText.text = "Cost " + Globals.Instance.SawCost + ":   Build a Sawmill next to forest to produce Wood";
+                    break;
                 case Board.Building.House:
-                    hintText.text = "Cost " + Globals.Instance.HouseCost + ":   Build a House next to Mines to make them mine more";
+                    hintText.text = "Cost " + Globals.Instance.HouseCost + ":   Build a House next to Resource buildings to improve production";
                     break;
                 case Board.Building.Mine:
                     hintText.text = "Cost " + Globals.Instance.MineCost + ":   Build a Mine next to ore";
@@ -160,10 +163,9 @@ public class Board : MonoBehaviour {
                 case Board.Building.Stabilizer:
                     hintText.text = "Cost " + Globals.Instance.StabilizerCost + ":   Build a Stabilizer to prevent tiles from falling";
                     break;
-                case Board.Building.Farm:
-                    hintText.text = "Cost " + Globals.Instance.StabilizerCost + ":   Build a Farm to produce food";
+                default:
+                    Debug.LogError("Unkown building type: " + newType);
                     break;
-                default: break;
             }
         } else {
             selectedType = Building.None;
@@ -171,8 +173,8 @@ public class Board : MonoBehaviour {
     }
 
     public void TileClicked(Tile tile) {
-        if (selectedType != Building.None && tile.IsEmpty() && ResourcesPanel.Instance.GetGold() >= GetCost(selectedType)) {
-            ResourcesPanel.Instance.UpdateGold(-GetCost(selectedType));
+        if (selectedType != Building.None && tile.IsEmpty() && ResourcesPanel.Instance.CanAfford( GetCost(selectedType))) {
+            ResourcesPanel.Instance.UpdateAll(-GetCost(selectedType));
             tile.SetBuilding(selectedType);
             //SetSelectedType(Building.None);
         }
@@ -180,15 +182,14 @@ public class Board : MonoBehaviour {
 
     private Vector4 GetCost(Building b) {
         switch (b) {
-            case Building.None: return 0f;
+            case Building.None: return Vector4.zero;
+            case Building.Saw: return Globals.Instance.SawCost;
             case Building.Mine: return Globals.Instance.MineCost;
             case Building.House: return Globals.Instance.HouseCost;
             case Building.Stabilizer: return Globals.Instance.StabilizerCost;
-            case Building.Farm: return Globals.Instance.FarmCost;
-            case Building.Gold: return 0f;
         }
 
-        return 0f;
+        return Vector4.zero;
     }
 
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum InfluenceType {stabilization, gold, iron, coal, mine, farm}
+public enum InfluenceType {stabilization, gold, wood, iron, coal, mine, saw}
 
 public class Tile : MonoBehaviour
 {
@@ -56,11 +56,14 @@ public class Tile : MonoBehaviour
             }
         }
 
-        if (UnityEngine.Random.value < 0.1f)
+        if (UnityEngine.Random.value < 0.1f) {
+            building = Board.Building.Wood;
+            OreImages[2].gameObject.SetActive(true);
+        } else if (UnityEngine.Random.value < 0.08f)
         {
             building = Board.Building.Iron;
             OreImages[0].gameObject.SetActive(true);
-        } else if (UnityEngine.Random.value < 0.05f) {
+        } else if (UnityEngine.Random.value < 0.04f) {
             building = Board.Building.Coal;
             OreImages[1].gameObject.SetActive(true);
         }
@@ -137,8 +140,8 @@ public class Tile : MonoBehaviour
             case Board.Building.Stabilizer:
                 BuildingImages[5].gameObject.SetActive(true);
                 break;
-            case Board.Building.Farm:
-                BuildingImages[4].gameObject.SetActive(true);
+            case Board.Building.Saw:
+                BuildingImages[6].gameObject.SetActive(true);
                 break;
             default:
                 Debug.Log("Not adding Building: " + b);
@@ -310,13 +313,24 @@ public class Tile : MonoBehaviour
                     return 0.0f;
                 }
 
+            case InfluenceType.wood: {
+                    if (building == Board.Building.Saw) {
+                        // Gather tilesWithinDistance(1) for houses and gather house influence
+                        float houseEffect = 0f;
+                        foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1)) {
+                            houseEffect += entry.Key.getInfluence(InfluenceType.saw);
+                        }
+                        return 1.0f + houseEffect;
+                    }
+                    return 0.0f;
+                }
             case InfluenceType.mine: {
                     if (building == Board.Building.House) {
                         return 0.5f;
                     }
                     return 0.0f;
                 }
-            case InfluenceType.farm:
+            case InfluenceType.saw:
                 {
                     if (building == Board.Building.House)
                     {
@@ -339,16 +353,16 @@ public class Tile : MonoBehaviour
         return 0.0f;
     }
 
-    public float foodHarvest()
+    public float woodHarvest()
     {
-        if (building == Board.Building.Farm)
+        if (building == Board.Building.Wood)
         {
-            float food = 1.0f;
+            float wood = 0f;
             foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1))
             {
-                food += entry.Key.getInfluence(InfluenceType.farm);
+                wood += entry.Key.getInfluence(InfluenceType.wood);
             }
-            return food;
+            return wood;
         }
         return 0.0f;
     }
