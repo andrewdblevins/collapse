@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Board.cs" />
-    <Compile Include="Assets\Scripts\ResourcesPanelBehavior.cs" />
+    <Compile Include="Assets\Scripts\ResourcesPanel.cs" />
     <Compile Include="Assets\Scripts\Tile.cs" />
     <Compile Include="Assets\Scripts\TileContainer.cs" />
     <Reference Include="UnityEditor.StandardEvents">
