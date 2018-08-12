@@ -7,14 +7,14 @@ public class TileContainer : MonoBehaviour {
     public Tile tile;
 
     public void OnMouseDown() {
-        tile.OnMouseDown();
+        tile.Click();
     }
 
     public void OnMouseEnter() {
-        tile.OnMouseEnter();
+        tile.Highlight();
     }
 
     public void OnMouseExit() {
-        tile.OnMouseExit();
+        tile.UnHighlight();
     }
 }

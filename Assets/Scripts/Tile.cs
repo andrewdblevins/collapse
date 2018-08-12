@@ -10,6 +10,14 @@ public class Tile : MonoBehaviour {
     public Transform container;
     public List<SpriteRenderer> Images;
 
+    public List<SpriteRenderer> Dodads;
+    public List<SpriteRenderer> OreImages;
+    public List<SpriteRenderer> BuildingImages;
+
+    private Board board;
+
+    private HashSet<Board.Building> buildings = new HashSet<Board.Building>();
+
     private int hp = -1;
     private int tileX;
     private int tileY;
@@ -36,34 +44,78 @@ public class Tile : MonoBehaviour {
         // SetHeight(UnityEngine.Random.Range(-0.1f, 0.1f));
         SetHeight();
 
-        bool flip = UnityEngine.Random.Range(0, 3) == 0;
-        if (flip) {
+        if (UnityEngine.Random.value < 0.33f) {
             Images[1].gameObject.SetActive(true);
-            flip = UnityEngine.Random.Range(0, 3) == 0;
-            if (flip) {
+            if (UnityEngine.Random.value < 0.33f) {
                 Images[2].gameObject.SetActive(true);
+            }
+        }
+
+        if (UnityEngine.Random.value < 0.1f) {
+            foreach (SpriteRenderer s in OreImages) {
+                s.gameObject.SetActive(true);
             }
         }
     }
 
-    public void OnMouseDown() {
-        Debug.Log("Clicked " + gameObject.name + " with hp " + getHp().ToString());
+    //public void OnMouseDown() {
+    //    Debug.Log("Clicked " + gameObject.name + " with hp " + getHp().ToString());
+    //}
+
+    //public void OnMouseEnter() {
+    //    //foreach (SpriteRenderer s in Images) {
+    //    //    s.color = Color.yellow;
+    //    //}
+    //}
+
+    //public void OnMouseExit() {
+        ////foreach (SpriteRenderer s in Images) {
+        ////    if (hp == 1) {
+        ////        s.color = Color.red;
+        ////    } else {
+        ////        s.color = Color.white;
+        ////    }
+        ////}
+
+    public void AddBuilding(Board.Building b) {
+        if (!buildings.Contains(b)) {
+            buildings.Add(b);
+            switch (b) {
+                case Board.Building.House:
+                    Images[4].gameObject.SetActive(true);
+                    Images[5].gameObject.SetActive(true);
+                    break;
+                case Board.Building.Mine:
+                    Images[4].gameObject.SetActive(true);
+                    break;
+                case Board.Building.Stabilizer:
+                    Images[3].gameObject.SetActive(true);
+                    break;
+                default: break;
+            }
+        }
     }
 
-    public void OnMouseEnter() {
-        //foreach (SpriteRenderer s in Images) {
-        //    s.color = Color.yellow;
-        //}
+    public void Click() {
+        Debug.Log("Clicked " + gameObject.name);
+        board.TileClicked(this);
     }
 
-    public void OnMouseExit() {
-        //foreach (SpriteRenderer s in Images) {
-        //    if (hp == 1) {
-        //        s.color = Color.red;
-        //    } else {
-        //        s.color = Color.white;
-        //    }
-        //}
+    public void Highlight() {
+        foreach (SpriteRenderer s in Images) {
+            s.color = Color.yellow;
+        }
+    }
+
+    public void UnHighlight() {
+        foreach (SpriteRenderer s in Images) {
+            if (hp == 1) {
+                s.color = Color.red;
+            } else {
+                s.color = Color.white;
+            }
+        }
+
     }
 
     public int getHp() {
@@ -74,7 +126,8 @@ public class Tile : MonoBehaviour {
         return hp > 0;
     }
 
-    public void initTile(int x, int y, List<List<Tile>> tileList, int? initHp=-1) {
+    public void initTile(int x, int y, List<List<Tile>> tileList, Board board, int? initHp=-1) {
+        this.board = board;
         tileX = x;
         tileY = y;
 
@@ -196,6 +249,9 @@ public class Tile : MonoBehaviour {
         {
             risk *= (1.0f - influenceDampener(entry.Key.getInfluence(InfluenceType.stabilization), entry.Value, InfluenceType.stabilization));
         }
+
+        risk = risk * 100;
+
         return risk;
     }
 
