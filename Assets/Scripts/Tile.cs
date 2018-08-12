@@ -37,8 +37,9 @@ public class Tile : MonoBehaviour
     private Tile yMinusTile = null;
     private Tile yPlusTile = null;
 
-    private float fallTick = 1f;
-    private float fallTimer = 1f;
+
+    private float fallTimer = 0f;
+    private float height;
     private int minTileListX;
     private int maxTileListX;
     private int minTileListY;
@@ -105,17 +106,12 @@ public class Tile : MonoBehaviour
 
     void Falling(){
         fallTimer -= Time.deltaTime;
-        if (fallTimer <= 0)
+        height = 0.05f * fallTimer;
+        if (fallTimer <= -10)
         {
-            fallTimer = fallTick; 
-            hp -= 1;
-            SetHeight();
-            if(hp < -10){
-                building = Board.Building.Void;
-                container.gameObject.SetActive(false);                
-            }
+            building = Board.Building.Void;
+            container.gameObject.SetActive(false);                
         }
-        
     }
 
 
@@ -578,7 +574,11 @@ public class Tile : MonoBehaviour
 
     private void SetHeight()
     {
-        float height = (getHp() * 0.05f);
+
+        if(hp >=0){
+            height = (getHp() * 0.05f);
+        }
+
         container.localPosition = new Vector3(0f, height, 0f);
     }
 
