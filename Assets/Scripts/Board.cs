@@ -31,6 +31,17 @@ public class Board : MonoBehaviour {
         return minHeight;
     }
 
+    public static InfluenceType? getBuildingInfluence(Building bldg) {
+        switch (bldg) {
+            case Building.Coal: return InfluenceType.coal;
+            case Building.Iron: return InfluenceType.iron;
+            case Building.Mine: return InfluenceType.mine;
+            case Building.Saw: return InfluenceType.saw;
+            case Building.Wood: return InfluenceType.wood;
+        }
+        return null;
+    }
+
     private int? getHeight(int x, int y)
     {
         //Corners will always be very low

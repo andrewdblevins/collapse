@@ -134,9 +134,45 @@ public class Tile : MonoBehaviour
         }
     }
 
+    public void displayInfluenceIcon()
+    {
+        InfluenceType? influenceType = Board.getBuildingInfluence(building);
+        if (influenceType == null) return;
+        //getInfluence((InfluenceType)influenceType);
 
+        //TODO: Create a separate structure if we start highlighting things within a larger distance
+        foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1))
+        {
+            Tile tile = entry.Key;
+            float influence = tile.getInfluence((InfluenceType)influenceType);
+            if (influence > 4.0f) {
+                tile.UpArrowImages[2].gameObject.SetActive(true);
+            } else if (influence > 2.0f) {
+                tile.UpArrowImages[1].gameObject.SetActive(true);
+            } else if (influence > 0.0f)
+            {
+                tile.UpArrowImages[0].gameObject.SetActive(true);
+            }
+            // Can later add other cases here if influence is being decreased
 
+        }
 
+    }
+
+    public void stopDisplayingInfluenceIcon()
+    {
+        InfluenceType? influenceType = Board.getBuildingInfluence(building);
+        if (influenceType == null) return;
+        //getInfluence((InfluenceType)influenceType);
+
+        //TODO: Create a separate structure if we start highlighting things within a larger distance
+        foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1)) {
+            Tile tile = entry.Key;
+            tile.UpArrowImages[2].gameObject.SetActive(false);
+            tile.UpArrowImages[1].gameObject.SetActive(false);
+            tile.UpArrowImages[0].gameObject.SetActive(false);
+        }
+    }
 
 
     public void SetBuilding(Board.Building b) {
