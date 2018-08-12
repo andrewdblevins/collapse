@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class ResourcesPanel : MonoBehaviour
 {
+    //Resouces
+    public float gold = 10f;
+    public float iron = 50f;
+    public float coal = 100f;
 
     public Text ironText;
     public Text coalText;
@@ -28,9 +32,9 @@ public class ResourcesPanel : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        updateIron(100);
-        updateCoal(40);
-        updateGold(100);
+        UpdateIron(100);
+        UpdateCoal(40);
+        UpdateGold(100);
 
     }
 
@@ -40,17 +44,38 @@ public class ResourcesPanel : MonoBehaviour
 
     }
 
-    public void updateIron(float t)
+    //Resources
+    public void UpdateGold(float amount)
+    {
+        gold += amount;
+        UpdateIronText(gold);
+    }
+
+    public void UpdateIron(float amount)
+    {
+        iron += amount;
+        UpdateIronText(iron);
+    }
+
+
+    public void UpdateCoal(float amount)
+    {
+        coal += amount;
+        UpdateCoalText(coal);
+
+    }
+
+    private void UpdateIronText(float t)
     {
         ironText.text = t.ToString();
     }
 
-    public void updateCoal(float t)
+    private void UpdateCoalText(float t)
     {
         coalText.text = t.ToString();
     }
 
-    public void updateGold(float t)
+    private void UpdateGoldText(float t)
     {
         goldText.text = t.ToString();
     }
