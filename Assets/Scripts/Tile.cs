@@ -37,7 +37,8 @@ public class Tile : MonoBehaviour
     private Tile yMinusTile = null;
     private Tile yPlusTile = null;
 
-
+    private float fallTick = 1f;
+    private float fallTimer = 1f;
     private int minTileListX;
     private int maxTileListX;
     private int minTileListY;
@@ -89,9 +90,29 @@ public class Tile : MonoBehaviour
         Tremor();
         UpdateSway();
 
+        if(hp <= 0){
+            Falling();
+        }
+
 
 
     }
+
+    void Falling(){
+        fallTimer -= Time.deltaTime;
+        if (fallTimer <= 0)
+        {
+            fallTimer = fallTick; 
+            hp -= 1;
+            SetHeight();
+            if(hp < -10){
+                building = Board.Building.Void;
+                container.gameObject.SetActive(false);                
+            }
+        }
+        
+    }
+
 
     public void UpdateSway(){
         
@@ -425,15 +446,13 @@ public class Tile : MonoBehaviour
         float randomDraw;
         randomDraw = UnityEngine.Random.value;
 
-        if (randomDraw < hpLossRisk()) {
+        if (randomDraw < hpLossRisk() && hp > 0) {
             hp -= 1;
         }
 
 
-        if (hp <= 0) {
-            building = Board.Building.Void;
-            container.gameObject.SetActive(false);
-        } else if (hp <= 1) {
+
+        if (hp <= 1) {
             foreach (SpriteRenderer s in Images) {
                 s.color = Color.red;
             }
