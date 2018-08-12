@@ -73,6 +73,11 @@ public class Tile : MonoBehaviour
 
 
         last_rotation = UnityEngine.Random.Range(-1.0f, 1.0f);
+
+
+        UpArrowImages[2].gameObject.SetActive(false);
+        UpArrowImages[1].gameObject.SetActive(false);
+        UpArrowImages[0].gameObject.SetActive(false);
     }
 
 
