@@ -20,7 +20,7 @@ public class Tile : MonoBehaviour
     private Board.Building building = Board.Building.None;
     private float total_rotation = 0f;
     private float max_rotation = 5f;
-    private float last_rotation = 0f;
+    private float last_rotation = 1f;
     private float rotation_rate = 5f;
     private int hp = -1;
     private int tileX;
@@ -64,17 +64,29 @@ public class Tile : MonoBehaviour
                 s.gameObject.SetActive(true);
             }
         }
+
+
+        last_rotation = UnityEngine.Random.Range(-1.0f, 1.0f);
     }
+
+
+
 
 
     void Update()
     {
         Tremor();
+        UpdateSway();
 
 
 
     }
 
+    public void UpdateSway(){
+        
+        rotation_rate = 5 + Mathf.Max(1, (10 - hp));
+        //max_rotation = rotation_rate * 3;
+    }
 
     public void Tremor()
     {
@@ -105,6 +117,8 @@ public class Tile : MonoBehaviour
             }
         }
     }
+
+
 
 
 
@@ -384,7 +398,6 @@ public class Tile : MonoBehaviour
 
         if (randomDraw < hpLossRisk()) {
             hp -= 1;
-            rotation_rate += 2;
         }
 
 
