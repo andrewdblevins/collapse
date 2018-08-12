@@ -9,6 +9,11 @@ public class Tile : MonoBehaviour {
 
     public Transform container;
     public List<SpriteRenderer> Images;
+
+    public List<SpriteRenderer> Dodads;
+    public List<SpriteRenderer> OreImages;
+    public List<SpriteRenderer> BuildingImages;
+
     private Board board;
 
     private HashSet<Board.Building> buildings = new HashSet<Board.Building>();
@@ -86,12 +91,16 @@ public class Tile : MonoBehaviour {
         // SetHeight(UnityEngine.Random.Range(-0.1f, 0.1f));
         SetHeight();
 
-        bool flip = UnityEngine.Random.Range(0, 3) == 0;
-        if (flip) {
+        if (UnityEngine.Random.value < 0.33f) {
             Images[1].gameObject.SetActive(true);
-            flip = UnityEngine.Random.Range(0, 3) == 0;
-            if (flip) {
+            if (UnityEngine.Random.value < 0.33f) {
                 Images[2].gameObject.SetActive(true);
+            }
+        }
+
+        if (UnityEngine.Random.value < 0.1f) {
+            foreach (SpriteRenderer s in OreImages) {
+                s.gameObject.SetActive(true);
             }
         }
     }
@@ -100,10 +109,15 @@ public class Tile : MonoBehaviour {
         if (!buildings.Contains(b)) {
             buildings.Add(b);
             switch (b) {
-                case Board.Building.House: break;
-                case Board.Building.Mine: break;
+                case Board.Building.House:
+                    Images[4].gameObject.SetActive(true);
+                    Images[5].gameObject.SetActive(true);
+                    break;
+                case Board.Building.Mine:
+                    Images[4].gameObject.SetActive(true);
+                    break;
                 case Board.Building.Stabilizer:
-                    Images[2].gameObject.SetActive(true);
+                    Images[3].gameObject.SetActive(true);
                     break;
                 default: break;
             }
@@ -112,7 +126,7 @@ public class Tile : MonoBehaviour {
 
     public void Click() {
         Debug.Log("Clicked " + gameObject.name);
-        Images[3].gameObject.SetActive(true);
+        board.TileClicked(this);
     }
 
     public void Highlight() {
@@ -205,6 +219,9 @@ public class Tile : MonoBehaviour {
         {
             risk *= (1.0f - influenceDampener(entry.Key.getInfluence(InfluenceType.stabilization), entry.Value, InfluenceType.stabilization));
         }
+
+        risk = risk * 100;
+
         return risk;
     }
 
