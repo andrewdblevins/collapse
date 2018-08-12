@@ -23,6 +23,14 @@ public class Board : MonoBehaviour {
     private const int minHeight = 0;
     private const float probabilityHeightAssign = 7.0f / (width * width);
 
+    public int getMaxHeight() {
+        return maxHeight;
+    }
+
+    public int getMinHeight() {
+        return minHeight;
+    }
+
     private int? getHeight(int x, int y)
     {
         //Corners will always be very low
@@ -78,7 +86,7 @@ public class Board : MonoBehaviour {
         //Apply tile height smoothing
         int iCnt = 0;
         while (iCnt < 400) {
-            bool ifSmoothed = Tiles[UnityEngine.Random.Range(minHeight, maxHeight)][UnityEngine.Random.Range(minHeight, maxHeight)].smoothHp();
+            bool ifSmoothed = Tiles[UnityEngine.Random.Range(2, width-3)][UnityEngine.Random.Range(2, width-3)].smoothHp();
             iCnt += 1;
         }
         iCnt = 0;

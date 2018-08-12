@@ -20,7 +20,7 @@ public class Tile : MonoBehaviour
     private Board.Building building = Board.Building.None;
     private float total_rotation = 0f;
     private float max_rotation = 5f;
-    private float last_rotation = 0f;
+    private float last_rotation = 1f;
     private float rotation_rate = 5f;
     private int hp = -1;
     private int tileX;
@@ -64,17 +64,33 @@ public class Tile : MonoBehaviour
             building = Board.Building.Coal;
             OreImages[1].gameObject.SetActive(true);
         }
+
+
+        last_rotation = UnityEngine.Random.Range(-1.0f, 1.0f);
     }
 
+
+
+    void Start(){
+        //if(hp > 0){
+        //    hp += 5;
+        //}
+    }
 
     void Update()
     {
         Tremor();
+        UpdateSway();
 
 
 
     }
 
+    public void UpdateSway(){
+        
+        rotation_rate = 5 + Mathf.Max(1, (10 - hp));
+        //max_rotation = rotation_rate * 3;
+    }
 
     public void Tremor()
     {
@@ -105,6 +121,8 @@ public class Tile : MonoBehaviour
             }
         }
     }
+
+
 
 
 
@@ -234,9 +252,9 @@ public class Tile : MonoBehaviour
             int neighHp = neighborTilesWithHp[0].getHp();
             //hp = neighHp;
             if (closerToEdge(neighborTilesWithHp[0])) {
-                hp = UnityEngine.Random.Range(Mathf.Max(neighHp - 2, 0), neighHp);
+                hp = UnityEngine.Random.Range(Mathf.Max(neighHp - 2, board.getMinHeight()), neighHp);
             } else {
-                hp = UnityEngine.Random.Range(neighHp, Mathf.Min(neighHp + 2, 15));
+                hp = UnityEngine.Random.Range(neighHp, Mathf.Min(neighHp + 2, board.getMaxHeight()));
             }
             //Debug.Log("Tile: " + name);
             //Debug.Log("Neighbor " + neighborTilesWithHp[0].name + " hp: " + neighHp.ToString());
@@ -385,7 +403,6 @@ public class Tile : MonoBehaviour
 
         if (randomDraw < hpLossRisk()) {
             hp -= 1;
-            rotation_rate += 2;
         }
 
 
