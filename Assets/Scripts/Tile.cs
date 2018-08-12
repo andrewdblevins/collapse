@@ -21,6 +21,7 @@ public class Tile : MonoBehaviour
     private float total_rotation = 0f;
     private float max_rotation = 5f;
     private float last_rotation = 0f;
+    private float rotation_rate = 5f;
     private int hp = -1;
     private int tileX;
     private int tileY;
@@ -74,17 +75,18 @@ public class Tile : MonoBehaviour
 
     }
 
+
     public void Tremor()
     {
         if (last_rotation >= 0)
         {
-            last_rotation = 5 * Time.deltaTime;
+            last_rotation =  rotation_rate * Time.deltaTime;
             total_rotation += last_rotation;
 
         }
         else
         {
-            last_rotation = -5 * Time.deltaTime;
+            last_rotation = -rotation_rate * Time.deltaTime;
             total_rotation += last_rotation;
         }
 
@@ -364,11 +366,9 @@ public class Tile : MonoBehaviour
 
         if (randomDraw < hpLossRisk()) {
             hp -= 1;
-        }else{
-            if(randomDraw > 0.99){
-                hp += 1;
-            }
+            rotation_rate += 2;
         }
+
 
         if (hp <= 0) {
             building = Board.Building.Void;
