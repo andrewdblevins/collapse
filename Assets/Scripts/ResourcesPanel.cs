@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class ResourcesPanel : MonoBehaviour
 {
     //Resouces
-    public float gold = 10f;
-    public float iron = 50f;
-    public float coal = 100f;
+    private float gold = 10f;
+    private float iron = 50f;
+    private float coal = 100f;
 
     public Text ironText;
     public Text coalText;

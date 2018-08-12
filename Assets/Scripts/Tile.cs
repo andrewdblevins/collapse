@@ -246,7 +246,7 @@ public class Tile : MonoBehaviour {
 
     public float goldHarvest() {
         if (building == Board.Building.Gold) {
-            float gold = 1.0f;
+            float gold = 0.0f;
             foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1)) {
                 gold += entry.Key.getInfluence(InfluenceType.gold);
             }

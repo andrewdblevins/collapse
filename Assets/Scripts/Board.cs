@@ -116,12 +116,15 @@ public class Board : MonoBehaviour {
 
     public void EndTurn() {
         tickTimer = tick;
+        float totalHarvest = 0f;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < width; j++) {
                 Tiles[i][j].turnHappens();
+                totalHarvest += Tiles[i][j].goldHarvest();
                 ResourcesPanel.Instance.UpdateGold(Tiles[i][j].goldHarvest());
             }
         }
+        Debug.Log("totalHarvest: " + totalHarvest);
     }
 
     public void SetSelectedType(string type) {
@@ -137,13 +140,13 @@ public class Board : MonoBehaviour {
                     hintText.text = "";
                     break;
                 case Board.Building.House:
-                    hintText.text = "Cost 50:   Build a House next to Mines to make them mine more";
+                    hintText.text = "Cost 25:   Build a House next to Mines to make them mine more";
                     break;
                 case Board.Building.Mine:
-                    hintText.text = "Cost 100:   Build a Mine next to ore";
+                    hintText.text = "Cost 50:   Build a Mine next to ore";
                     break;
                 case Board.Building.Stabilizer:
-                    hintText.text = "Cost 200:   Build a Stabilizer to prevent tiles from falling";
+                    hintText.text = "Cost 100:   Build a Stabilizer to prevent tiles from falling";
                     break;
                 default: break;
             }
@@ -163,9 +166,9 @@ public class Board : MonoBehaviour {
     private float GetCost(Building b) {
         switch (b) {
             case Building.None: return 0f;
-            case Building.Mine: return 100f;
-            case Building.House: return 50f;
-            case Building.Stabilizer: return 200f;
+            case Building.Mine: return 50f;
+            case Building.House: return 25f;
+            case Building.Stabilizer: return 100f;
             case Building.Gold: return 0f;
         }
 
