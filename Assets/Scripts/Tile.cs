@@ -28,8 +28,8 @@ public class Tile : MonoBehaviour
     private int tileY;
     private const int maxDampeningDistance = 3;
     private const float baseHpLossRisk = 0.03f;
-    private float modifiedHpLossRisk = baseHpLossRisk;
-
+    public float modifiedHpLossRisk = baseHpLossRisk;
+    public float normalizedHpLossRisk = baseHpLossRisk;
     private Tile xMinusTile = null;
     private Tile xPlusTile = null;
     private Tile yMinusTile = null;
@@ -401,7 +401,8 @@ public class Tile : MonoBehaviour
         }
 
         modifiedHpLossRisk = risk * Globals.Instance.DecayRate;
-        return modifiedHpLossRisk;
+
+        return normalizedHpLossRisk;
     }
 
     public void turnHappens() {
