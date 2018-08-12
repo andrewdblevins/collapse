@@ -118,9 +118,10 @@ public class Tile : MonoBehaviour
                 break;
             case Board.Building.Mine:
                 BuildingImages[2].gameObject.SetActive(true);
+                BuildingImages[3].gameObject.SetActive(true);
                 break;
             case Board.Building.Stabilizer:
-                BuildingImages[3].gameObject.SetActive(true);
+                BuildingImages[5].gameObject.SetActive(true);
                 break;
             case Board.Building.Farm:
                 BuildingImages[4].gameObject.SetActive(true);
