@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Board : MonoBehaviour {
 
-    public enum Building { None, Mine, House, Stabilizer, Farm, Gold, Void};
+    public enum Building { None, Mine, House, Stabilizer, Farm, Gold, Iron, Coal, Void};
     public Building selectedType = Building.None;
 
     public GameObject TilePrefab;
@@ -166,7 +166,7 @@ public class Board : MonoBehaviour {
         if (selectedType != Building.None && tile.IsEmpty() && ResourcesPanel.Instance.GetGold() >= GetCost(selectedType)) {
             ResourcesPanel.Instance.UpdateGold(-GetCost(selectedType));
             tile.SetBuilding(selectedType);
-            SetSelectedType(Building.None);
+            //SetSelectedType(Building.None);
         }
     }
 

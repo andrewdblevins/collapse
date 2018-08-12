@@ -17,6 +17,8 @@ public class Globals : MonoBehaviour {
     }
 
     public float GoldMultiplier = 3f;
+    public float IronMultiplier = 3f;
+    public float CoalMultiplier = 3f;
     public float MineCost = 50f;
     public float HouseCost = 25f;
     public float StabilizerCost = 100f;
