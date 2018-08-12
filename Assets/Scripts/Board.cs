@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Board : MonoBehaviour {
 
-    public enum Building { None, Mine, House, Stabilizer, Saw, Wood, Gold, Iron, Coal, Void, Upgrade};
+    public enum Building { None, Mine, House, Stabilizer, Saw, Mine2, House2, Stabilizer2, Saw2, Wood, Gold, Iron, Coal, Void, Upgrade};
     public Building selectedType = Building.None;
 
     public GameObject TilePrefab;
@@ -166,6 +166,9 @@ public class Board : MonoBehaviour {
                 case Board.Building.Stabilizer:
                     hintText.text = "Cost " + Globals.Instance.StabilizerCost + ":   Build a Stabilizer to prevent tiles from falling";
                     break;
+                case Board.Building.Upgrade:
+                    hintText.text = "Upgrade an existing building";
+                    break;
                 default:
                     Debug.LogError("Unkown building type: " + newType);
                     break;
@@ -176,19 +179,12 @@ public class Board : MonoBehaviour {
     }
 
     public void TileClicked(Tile tile) {
+        Building buildType = selectedType;
         if (selectedType == Building.Upgrade) {
-            switch (tile.GetBuildingType()) {
-                case Building.Saw:
-                case Building.Mine:
-                case Building.House:
-                case Building.Stabilizer:
-                    if (ResourcesPanel.Instance.CanAfford(GetUpgradeCost(tile.GetBuildingType()))) {
-                        ResourcesPanel.Instance.UpdateAll(-GetCost(tile.GetBuildingType()));
-                        //tile.SetBuilding(selectedType);
-                    }
-                    break;
-            }
-        } else if (selectedType != Building.None && ResourcesPanel.Instance.CanAfford( GetCost(selectedType))) {
+            buildType = GetUpgradeType(tile.GetBuildingType());
+        }
+
+        if (selectedType != Building.None && ResourcesPanel.Instance.CanAfford( GetCost(selectedType))) {
             ResourcesPanel.Instance.UpdateAll(-GetCost(selectedType));
             tile.SetBuilding(selectedType);
             //SetSelectedType(Building.None);
@@ -202,21 +198,24 @@ public class Board : MonoBehaviour {
             case Building.Mine: return Globals.Instance.MineCost;
             case Building.House: return Globals.Instance.HouseCost;
             case Building.Stabilizer: return Globals.Instance.StabilizerCost;
+            case Building.Saw2: return Globals.Instance.Saw2Cost;
+            case Building.Mine2: return Globals.Instance.Mine2Cost;
+            case Building.House2: return Globals.Instance.House2Cost;
+            case Building.Stabilizer2: return Globals.Instance.Stabilizer2Cost;
         }
 
         return Vector4.zero;
     }
 
-    private Vector4 GetUpgradeCost(Building b) {
+    private Building GetUpgradeType(Building b) {
         switch (b) {
-            case Building.None: return Vector4.zero;
-            case Building.Saw: return Globals.Instance.Saw2Cost;
-            case Building.Mine: return Globals.Instance.Mine2Cost;
-            case Building.House: return Globals.Instance.House2Cost;
-            case Building.Stabilizer: return Globals.Instance.Stabilizer2Cost;
+            case Building.Saw: return Building.Saw2;
+            case Building.Mine: return Building.Mine2;
+            case Building.House: return Building.House2;
+            case Building.Stabilizer: return Building.Stabilizer2;
         }
 
-        return Vector4.zero;
+        return Building.None;
     }
 
 }
