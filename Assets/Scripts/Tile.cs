@@ -23,6 +23,7 @@ public class Tile : MonoBehaviour {
     private int tileY;
     private const int maxDampeningDistance = 3;
     private const float baseHpLossRisk = 0.03f;
+    private float modifiedHpLossRisk = baseHpLossRisk;
 
     private Tile xMinusTile = null;
     private Tile xPlusTile = null;
@@ -267,14 +268,20 @@ public class Tile : MonoBehaviour {
                                               InfluenceType.stabilization));
         }
 
-        risk = risk * Globals.Instance.DecayRate;
-
-        return risk;
+        modifiedHpLossRisk = risk * Globals.Instance.DecayRate;
+        return modifiedHpLossRisk;
     }
 
     public void turnHappens() {
-        if (UnityEngine.Random.value < hpLossRisk()) {
+        float randomDraw;
+        randomDraw = UnityEngine.Random.value;
+
+        if (randomDraw < hpLossRisk()) {
             hp -= 1;
+        }else{
+            if(randomDraw > 0.99){
+                hp += 1;
+            }
         }
 
         if (hp <= 0) {
