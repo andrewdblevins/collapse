@@ -409,7 +409,7 @@ public class Tile : MonoBehaviour
                         {
                             houseEffect += entry.Key.getInfluence(InfluenceType.mine);
                         }
-                        return 2.0f + 2 * houseEffect;
+                        return 2.0f + 2.0f * houseEffect;
                     }
                     return 0.0f;
                 }
@@ -431,7 +431,7 @@ public class Tile : MonoBehaviour
                         {
                             houseEffect += entry.Key.getInfluence(InfluenceType.mine);
                         }
-                        return 2.0f + 2 * houseEffect;
+                        return 2.0f + 2.0f * houseEffect;
                     }
                     return 0.0f;
                 }
@@ -444,6 +444,15 @@ public class Tile : MonoBehaviour
                             houseEffect += entry.Key.getInfluence(InfluenceType.saw);
                         }
                         return 1.0f + houseEffect;
+                    } else if (building == Board.Building.Saw2)
+                    {
+                        // Gather tilesWithinDistance(1) for houses and gather house influence
+                        float houseEffect = 0f;
+                        foreach (KeyValuePair<Tile, int> entry in tilesWithinDistance(1))
+                        {
+                            houseEffect += entry.Key.getInfluence(InfluenceType.saw);
+                        }
+                        return 2.0f + 2.0f * houseEffect;
                     }
                     return 0.0f;
                 }
